@@ -34,125 +34,47 @@ window.addEventListener("scroll", () => {
   })
 })
 
-// Intersection Observer for animations
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: "0px 0px -50px 0px",
-}
+// Mobile menu toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menu-toggle")
+  const menuOverlay = document.querySelector(".menu-overlay")
+  const navLinks = document.querySelectorAll(".nav-menu a")
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("fade-in-up")
+  // Close menu when overlay is clicked
+  if (menuOverlay) {
+    menuOverlay.addEventListener("click", () => {
+      menuToggle.checked = false
+      document.body.style.overflow = ""
+    })
+  }
+
+  // Close menu when a nav link is clicked
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      menuToggle.checked = false
+      document.body.style.overflow = ""
+    })
+  })
+
+  // Prevent body scroll when menu is open
+  menuToggle.addEventListener("change", () => {
+    if (menuToggle.checked) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
     }
   })
-}, observerOptions)
 
-// Observe all sections and cards
-document.addEventListener("DOMContentLoaded", () => {
-  const elementsToAnimate = document.querySelectorAll(".project-card, .service-card, .skill-item, .stat-item")
-  elementsToAnimate.forEach((el) => observer.observe(el))
+  // Initialize custom scroll features
+  initCustomScrollWheel()
+  createScrollParticles()
+  window.addEventListener("scroll", handleScroll)
+  initMouseGlow()
+  updateScrollProgress()
+  initCustomCursor()
 })
 
-// Parallax effect for background elements
-window.addEventListener("scroll", () => {
-  const scrolled = window.pageYOffset
-  const parallaxElements = document.querySelectorAll(".bars-animation")
-
-  parallaxElements.forEach((element) => {
-    const speed = 0.5
-    element.style.transform = `translateY(${scrolled * speed}px)`
-  })
-})
-
-// Dynamic typing effect enhancement
-const typingTexts = document.querySelectorAll(".home-info h2 span")
-const currentIndex = 0
-
-function enhanceTypingEffect() {
-  typingTexts.forEach((text, index) => {
-    text.addEventListener("animationiteration", () => {
-      if (index === currentIndex) {
-        text.style.color = "#008cff"
-        setTimeout(() => {
-          text.style.color = "transparent"
-        }, 3000)
-      }
-    })
-  })
-}
-
-// Initialize enhanced effects
-document.addEventListener("DOMContentLoaded", () => {
-  enhanceTypingEffect()
-
-  // Add loading animation completion
-  setTimeout(() => {
-    document.body.classList.add("loaded")
-  }, 2000)
-})
-
-// Contact form handling
-document.querySelector(".contact-form form").addEventListener("submit", function (e) {
-  e.preventDefault()
-
-  // Get form data
-  const formData = new FormData(this)
-  const name = this.querySelector('input[type="text"]').value
-  const email = this.querySelector('input[type="email"]').value
-  const subject = this.querySelector('input[placeholder="Subject"]').value
-  const message = this.querySelector("textarea").value
-
-  // Simple validation
-  if (name && email && subject && message) {
-    // Simulate form submission
-    const submitBtn = this.querySelector(".btn")
-    const originalText = submitBtn.textContent
-
-    submitBtn.textContent = "Sending..."
-    submitBtn.style.opacity = "0.7"
-
-    setTimeout(() => {
-      submitBtn.textContent = "Message Sent!"
-      submitBtn.style.background = "linear-gradient(45deg, #00ff88, #00cc6a)"
-
-      setTimeout(() => {
-        submitBtn.textContent = originalText
-        submitBtn.style.background = "linear-gradient(45deg, #008cff, #7ec5ff)"
-        submitBtn.style.opacity = "1"
-        this.reset()
-      }, 2000)
-    }, 1500)
-  }
-})
-
-// Add hover effects for project cards
-document.querySelectorAll(".project-card").forEach((card) => {
-  card.addEventListener("mouseenter", function () {
-    this.style.transform = "translateY(-10px) rotateX(5deg)"
-  })
-
-  card.addEventListener("mouseleave", function () {
-    this.style.transform = "translateY(0) rotateX(0deg)"
-  })
-})
-
-// Skill bars animation on scroll
-const skillBars = document.querySelectorAll(".skill-progress")
-const skillObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = "skill-fill 2s ease-in-out forwards"
-      }
-    })
-  },
-  { threshold: 0.5 },
-)
-
-skillBars.forEach((bar) => skillObserver.observe(bar))
-
-// Custom Scroll Indicator
+// Custom Scroll Progress
 function updateScrollProgress() {
   const scrollTop = window.pageYOffset
   const docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -170,7 +92,6 @@ function initCustomScrollWheel() {
   const scrollDots = document.querySelectorAll(".scroll-dot")
   const sections = document.querySelectorAll("section")
 
-  // Show/hide scroll wheel based on scroll position
   function toggleScrollWheel() {
     if (window.pageYOffset > 100) {
       scrollWheel.classList.add("visible")
@@ -179,7 +100,6 @@ function initCustomScrollWheel() {
     }
   }
 
-  // Update active dot based on current section
   function updateActiveDot() {
     let current = ""
     sections.forEach((section) => {
@@ -198,7 +118,6 @@ function initCustomScrollWheel() {
     })
   }
 
-  // Click handlers for scroll dots
   scrollDots.forEach((dot) => {
     dot.addEventListener("click", () => {
       const targetSection = dot.getAttribute("data-section")
@@ -215,6 +134,7 @@ function initCustomScrollWheel() {
   window.addEventListener("scroll", () => {
     toggleScrollWheel()
     updateActiveDot()
+    updateScrollProgress()
   })
 }
 
@@ -231,7 +151,6 @@ function createScrollParticles() {
 
     bgAnimation.appendChild(particle)
 
-    // Remove particle after animation
     setTimeout(() => {
       if (particle.parentNode) {
         particle.parentNode.removeChild(particle)
@@ -239,7 +158,6 @@ function createScrollParticles() {
     }, 10000)
   }
 
-  // Create particles periodically
   setInterval(createParticle, 500)
 }
 
@@ -283,7 +201,6 @@ function initCustomCursor() {
   cursor.className = "custom-cursor"
   document.body.appendChild(cursor)
 
-  // Create cursor trail elements
   const trailElements = []
   for (let i = 0; i < 8; i++) {
     const trail = document.createElement("div")
@@ -299,13 +216,11 @@ function initCustomCursor() {
   const trailX = []
   const trailY = []
 
-  // Initialize trail positions
   for (let i = 0; i < trailElements.length; i++) {
     trailX[i] = 0
     trailY[i] = 0
   }
 
-  // Mouse move handler
   document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX
     mouseY = e.clientY
@@ -314,7 +229,6 @@ function initCustomCursor() {
     cursor.style.top = mouseY + "px"
   })
 
-  // Animate cursor trail
   function animateTrail() {
     trailX[0] = mouseX
     trailY[0] = mouseY
@@ -331,7 +245,6 @@ function initCustomCursor() {
   }
   animateTrail()
 
-  // Hover effects for interactive elements
   const interactiveElements = document.querySelectorAll("a, button, .btn, .project-card, .service-card, .scroll-dot")
 
   interactiveElements.forEach((element) => {
@@ -344,7 +257,6 @@ function initCustomCursor() {
     })
   })
 
-  // Text cursor for input fields
   const textElements = document.querySelectorAll("input, textarea")
 
   textElements.forEach((element) => {
@@ -357,7 +269,6 @@ function initCustomCursor() {
     })
   })
 
-  // Click effect
   document.addEventListener("mousedown", () => {
     cursor.classList.add("click")
   })
@@ -366,7 +277,6 @@ function initCustomCursor() {
     cursor.classList.remove("click")
   })
 
-  // Hide cursor when leaving window
   document.addEventListener("mouseleave", () => {
     cursor.style.opacity = "0"
     trailElements.forEach((trail) => {
@@ -381,26 +291,3 @@ function initCustomCursor() {
     })
   })
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Dynamic typing effect enhancement
-  enhanceTypingEffect()
-
-  // Add loading animation completion
-  setTimeout(() => {
-    document.body.classList.add("loaded")
-  }, 2000)
-
-  // Observe all sections and cards
-  const elementsToAnimate = document.querySelectorAll(".project-card, .service-card, .skill-item, .stat-item")
-  elementsToAnimate.forEach((el) => observer.observe(el))
-
-  // Initialize custom scroll features
-  initCustomScrollWheel()
-  createScrollParticles()
-  window.addEventListener("scroll", handleScroll)
-  initMouseGlow()
-  updateScrollProgress()
-
-  initCustomCursor()
-})
