@@ -6,20 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oluwanifemi Oladimeji - Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="/placeholder.svg?height=32&width=32">
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <nav class="navbar">
+        <input type="checkbox" id="menu-toggle">
         <a href="#home" class="logo">Portfolio</a> 
-        <ul>
+        <ul class="nav-menu">
+            <label class="close-btn" for="menu-toggle"><i class="fas fa-times"></i></label> 
+           
             <li class="active"><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#projects">Projects</a></li>
+            <li><a href="#videos">Video</a></li>
+            <li><a href="#code">Code</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <label class="hamburger" for="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </label> 
     </nav>
+
+    <div class="menu-overlay"></div>
 
     <!-- Added custom scroll indicator -->
     <div class="scroll-indicator">
@@ -53,25 +65,25 @@
         <div class="home-info">
             <h1>Oluwanifemi Oladimeji</h1>
             <h2>I'm a
-                <span style="--i:1" data-text="Frontend Developer">Frontend Developer</span>
-                <span style="--i:2" data-text="Video Editor">Video Editor</span>
-                <span style="--i:3" data-text="Graphic Designer">Graphic Designer</span>
-                <span style="--i:4" data-text="3D Animator">3D Animator</span>
+                
+                <span style="--i:1" data-text="Video Editor">Video Editor</span>
+                <span style="--i:2" data-text="Graphic Designer">Graphic Designer</span>
+                <span style="--i:3" data-text="3D Animator">3D Animator</span>
+                <span style="--i:4" data-text="Frontend Developer">Frontend Developer</span>
             </h2>
             <p>Passionate creative professional specializing in modern web development, stunning visual designs, and immersive digital experiences. I bring ideas to life through code, creativity, and cutting-edge technology.</p>
             <div class="btn-sci">
-                <a href="#" class="btn">Download CV</a>
+                <a href="Oluwanifemi-(Nifemi)-Oladimeji-FlowCV-Resume-20251014.pdf" class="btn">Download CV</a>
                 <div class="sci">
-                    <a href="https://github.com/"><i class='bx bxl-github'></i></a>  
-                    <a href="#"><i class='bx bxl-linkedin'></i></a>
-                    <a href="#"><i class='bx bxl-instagram'></i></a>  
+                    <a href="https://github.com/knifeprime/Portfolio/tree/knifeprime-patch-1"><i class='bx bxl-github'></i></a>  
+                    <a href="https://www.linkedin.com/in/oluwanifemi-oladimeji/"><i class='bx bxl-linkedin'></i></a>
                 </div>
             </div>
         </div>
         <div class="home-img">
             <div class="img-box">
                 <div class="img-item">
-                    <img src="InShot_20250825_113738760.png" alt="Oluwanifemi Oladimeji">   
+                    <img src="images/InShot_20250825_113738760.png" alt="Oluwanifemi Oladimeji">   
                 </div>
             </div>
         </div>
@@ -106,11 +118,11 @@
                 </div>
                 <div class="about-stats">
                     <div class="stat-item">
-                        <h3>50+</h3>
+                        <h3>15+</h3>
                         <p>Projects Completed</p>
                     </div>
                     <div class="stat-item">
-                        <h3>3+</h3>
+                        <h3>2+</h3>
                         <p>Years Experience</p>
                     </div>
                     <div class="stat-item">
@@ -128,20 +140,21 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="{DA2E6FED-AC2D-4A86-922E-E377BDD342A4}.png.jpg" alt="E-commerce Website">
+                        <img src="Annotation 2025-10-13 111637.png" alt="E-commerce Website">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/Leading-people-assembly.com/" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/Leading-people-assembly.com" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/Weather-app-/"class="project-link"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/Weather-app-" class="project-link"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Church Website  Gods Love Evangelical (Leading People’s Assembly)</h3>
-                        <p>A modern, responsive website built to serve as the digital home for God’s Love Evangelical. The site provides visitors with easy access to sermons, upcoming events, service schedules, and ministry information. Designed with a clean and welcoming interface, it highlights the church’s mission, showcases community activities, and offers simple navigation for both new and existing members. Integrated features include an online contact form, announcements section, and media gallery to share church moments.</p>
+                        <h3>Weather App</h3>
+                        <p>A responsive weather application built with HTML, CSS, and JavaScript that fetches real-time weather data using an external API. The interface features dynamic background animations that change based on weather conditions (e.g., sunny, cloudy, rainy), creating a more immersive user experience. Users can search for any city and instantly view temperature, humidity, and weather status with smooth transitions and clean UI design.</p>
                         <div class="project-tech">
                             <span>Html</span>
                             <span>Css</span>
+                            <span>JavaScript</span>
                            
                         </div>
                     </div>
@@ -149,105 +162,268 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="{F09C0D84-3DA1-47DE-811D-481E85BCA5A8}.png.jpg" alt="Video Portfolio">
+                        <img src="Annotation 2025-10-13 112438.png" alt="Video Portfolio">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="0812.mp4" class="project-link"><i class='bx bx-play'></i></a>
+                             <a href="https://knifeprime.github.io/dep-backend/"class="project-link"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/dep-backend" class="project-link"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
+                        <h3>Form Validation App</h3>
+                        <p>A lightweight JavaScript-powered form validation page designed to ensure proper user input before submission. The application requires users to enter a three-word username and a password that must match its confirmation field. Real-time validation provides instant feedback through dynamic messages and visual cues, preventing incorrect submissions and improving overall user experience. Built with clean HTML, CSS, and JavaScript for simplicity and efficiency.</p>
+                        <div class="project-tech">
+                            <span>Html</span>
+                             <span>Css</span>
+                              <span>JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Annotation 2025-10-13 113825.png" alt="3D Animation">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                 <a href="https://knifeprime.github.io/user-finder/"class="project-link"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/user-finder" class="project-link"><i class='bx bxl-github'></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>GitHub Profile Finder</h3>
+                        <p>A user lookup tool built with HTML, CSS, and JavaScript that allows users to search for any GitHub profile by username. The app fetches real-time data using the GitHub API and displays key information such as profile picture, bio, follower count, public repositories, and profile link. Designed with a clean, responsive layout and smooth error handling for invalid users. A practical project that highlights API integration and dynamic UI rendering.</p>
+                        <div class="project-tech">
+                            <span>Html</span>
+                            <span>Css</span>
+                            <span>JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Annotation 2025-10-13 120424.png" alt="Mobile App">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="https://knifeprime.github.io/RPS/" class="project-link"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/RPS" class="project-link"><i class='bx bxl-github'></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Rock Paper Scissors Game</h3>
+                        <p>A simple yet interactive Rock Paper Scissors game built with HTML and JavaScript. Players compete against the computer, with instant results displayed after each round. The game features randomized computer choices, score tracking, and smooth UI feedback to enhance player engagement. A fun project that showcases core JavaScript logic, event handling, and DOM manipulation.</p>
+                        <div class="project-tech">
+                            <span>Html</span>
+                            <span>JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="Annotation 2025-10-13 124752.png" alt="Brand Identity">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="https://knifeprime.github.io/MOVIE-Search/" class="project-link"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/MOVIE-Search" class="project-link"><i class='bx bxl-github'></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Movie Search App</h3>
+                        <p>A sleek movie search application built with HTML, CSS, and JavaScript, powered by the OMDb API. Users can search for any movie by title and instantly view key details such as poster, release year, genre, and plot summary. The app features real-time API fetching, dynamic content rendering, and a clean, responsive layout designed for both desktop and mobile. A great example of integrating external APIs and handling asynchronous JavaScript to create an interactive user experience.</p>
+                        <div class="project-tech">
+                            <span>Html</span>
+                            <span>JavaScript</span>
+                           
+                        </div>
+                    </div>
+                </div>
+
+            
+            </div>
+        </div>
+    </section>
+    <section class="videos" id="videos">
+        <div class="videos-content">
+            <h2 class="section-title">Video <span>Editing</span></h2>
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF09C0D84-3DA1-47DE-811D-481E85BCA5A8%7D.png.jpg-sNjWKBPPJtPX05pqAWhynAd8NEJXeG.jpeg" alt="Church Event Promo Video">
+                        <div class="video-overlay">
+                            <div class="play-button">
+                                <div class="project-links">
+                                    <a href="0812.mp4" class="project-link"><i class='bx bx-play'></i></a>
+                                </div>
+                                <i class="bx bx-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-info">
                         <h3>Church Event Promo Video</h3>
-                        <p>A visually creative edit highlighting the beauty and emotion of live guitar worship. The video combines smooth cuts, stylized effects, and rhythmic pacing to match the flow of the music. Designed as an artistic showcase, it captures both the spiritual atmosphere and the expressive artistry of the guitarist, making it a unique piece for church media and social platforms.</p>
-                        <div class="project-tech">
+                        <p>
+                            Dynamic promotional video for church events featuring multiple participants, smooth transitions, and
+                            engaging visual effects. Created using professional editing techniques with color grading and motion
+                            graphics.
+                        </p>
+                        <div class="video-tech">
                             <span>CapCut</span>
+                            <span>Color Grading</span>
+                            <span>Motion Graphics</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="/placeholder.svg?height=250&width=400" alt="3D Animation">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link"><i class='bx bx-play'></i></a>
-                                <a href="#" class="project-link"><i class='bx bx-link-external'></i></a>
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B7E22D0BE-20E9-4913-B003-BAFA12F33BD8%7D.png.jpg-O5PIcP7QmutJgeZMVKX7PUGHnDXShW.jpeg" alt="Evangelical Presentation">
+                        <div class="video-overlay">
+                            <div class="play-button">
+                                <div class="project-links">
+                                    <a href="https://drive.google.com/file/d/1yW2NlkpLjIVhNDUCj34wid52iBTNH3Al/preview" target="_blank" class="project-link"><i class='bx bx-play'></i></a>
+
+                                </div>
+                                <i class="bx bx-play"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="project-info">
-                        <h3>3D Character Animation</h3>
-                        <p>Stylized 3D character design and animation for gaming and entertainment industry clients.</p>
-                        <div class="project-tech">
-                            <span>Blender</span>
-                            <span>Maya</span>
-                            <span>Substance</span>
+                    <div class="video-info">
+                        <h3>Evangelical Presentation</h3>
+                        <p>
+                            Professional presentation video with clean typography overlays, smooth camera work, and engaging
+                            visual storytelling for religious content.
+                        </p>
+                        <div class="video-tech">
+                            <span>CapCut</span>
+                            <span>D-ID</span>
+                            <span>Typography</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Mobile App">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="#" class="project-link"><i class='bx bxl-figma'></i></a>
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7B87769300-9FA7-4D22-ADC3-8E2BE0DFF669%7D.png.jpg-q9gYFpftojX9erD4rSw65TILCpu74m.jpeg" alt="Motivational Content">
+                        <div class="video-overlay">
+                            <div class="play-button">
+                                <div class="project-links">
+                                   <a href="https://drive.google.com/file/d/1B98z4sRXKrPpSFgsCiQ6UxkG6kf752au/preview" target="_blank" class="project-link"><i class='bx bx-play'></i></a>
+
+                                </div>
+                                <i class="bx bx-play"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="project-info">
-                        <h3>Mobile App Design</h3>
-                        <p>User-centered mobile application design with intuitive navigation and engaging user experience.</p>
-                        <div class="project-tech">
-                            <span>Figma</span>
-                            <span>React Native</span>
-                            <span>UI/UX</span>
+                    <div class="video-info">
+                        <h3>Motivational Content</h3>
+                        <p>
+                            Inspirational video content with dynamic text animations, atmospheric backgrounds, and compelling
+                            visual narrative designed to engage and motivate viewers.
+                        </p>
+                        <div class="video-tech">
+                            <span>CapCut</span>
+                            <span>Text Animation</span>
+                            <span>Visual Effects</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Brand Identity">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="#" class="project-link"><i class='bx bx-image'></i></a>
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="Annotation 2025-10-13 140859.png" alt="Social Media Content">
+                        <div class="video-overlay">
+                            <div class="play-button">
+                                <div class="project-links">
+                                   <a href="https://drive.google.com/file/d/15GpmH1DsszDs_14HhQUCS2_81Z2c_ERh/preview" target="_blank" class="project-link"><i class='bx bx-play'></i></a>
+
+                                </div>
+                                <i class="bx bx-play"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="project-info">
-                        <h3>Brand Identity Package</h3>
-                        <p>Complete brand identity design including logo, color palette, typography, and marketing materials.</p>
-                        <div class="project-tech">
-                            <span>Illustrator</span>
-                            <span>Photoshop</span>
-                            <span>InDesign</span>
+                    <div class="video-info">
+                        <h3>Social Media Content</h3>
+                        <p>
+                            Engaging short-form content optimized for social media platforms
+                        </p>
+                        <div class="video-tech">
+                            <span>CapCut</span>
+                            <span>Social Media</span>
+                            <span>Trending Effects</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+        
+    <section class="code" id="code">
+        <div class="code-content">
+            <h2 class="section-title">Site <span>Projects</span></h2>
+            <div class="code-grid">
+                <div class="code-card">
+                    <div class="code-preview">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BDA2E6FED-AC2D-4A86-922E-E377BDD342A4%7D.png.jpg-o52xF3Eh4wp4OhWKvbDxlZ0upYjzqf.jpeg" alt="Church Website Code">
+                        <div class="code-overlay">
+                            <div class="code-links">
+                                <a href="https://knifeprime.github.io/Leading-people-assembly.com/" class="code-link">
+                                    <i class="bx bx-link-external"></i>
+                                </a>
+                                <a href="https://github.com/knifeprime/Leading-people-assembly.com" class="code-link">
+                                    <i class="bx bxl-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-info">
+                        <h3>God's Love Evangelical Church</h3>
+                        <p>
+                            Responsive church website with modern design, event management, sermon archives, and contact forms.
+                            Built with clean HTML5, CSS3, and vanilla JavaScript for optimal performance.
+                        </p>
+                        <div class="code-tech">
+                            <span>HTML5</span>
+                            <span>CSS3</span>
+                            <span>Responsive Design</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="/placeholder.svg?height=250&width=400" alt="Dashboard">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="#" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="#" class="project-link"><i class='bx bxl-github'></i></a>
+               
+                <div class="code-card">
+                    <div class="code-preview">
+                        <img src="Annotation 2025-10-14 100553.png" alt="">
+                        <div class="code-overlay">
+                            <div class="code-links">
+                                <a href="#home" class="code-link">
+                                    <i class="bx bx-link-external"></i>
+                                </a>
+                                <a href="https://github.com/knifeprime/Portfolio/tree/knifeprime-patch-1" class="code-link">
+                                    <i class="bx bxl-github"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="project-info">
-                        <h3>Analytics Dashboard</h3>
-                        <p>Interactive data visualization dashboard with real-time updates and comprehensive reporting features.</p>
-                        <div class="project-tech">
-                            <span>Vue.js</span>
-                            <span>D3.js</span>
-                            <span>Firebase</span>
+                    <div class="code-info">
+                        <h3>THIS</h3>
+                        <p>
+                           ONE🙂
+                        </p>
+                        <div class="code-tech">
+                           <span>Html</span>
+                           <span>Css</span>
+                           <span>Javascript</span>
                         </div>
                     </div>
                 </div>
+
+               
             </div>
         </div>
     </section>
@@ -298,40 +474,32 @@
                     <div class="contact-details">
                         <div class="contact-item">
                             <i class='bx bx-envelope'></i>
-                            <span>oluwanifemi@example.com</span>
+                            <span>oluwanifemisamueloladimeji@gmail.com</span>
                         </div>
                         <div class="contact-item">
                             <i class='bx bx-phone'></i>
-                            <span>+234 123 456 7890</span>
+                            <span>+234 81 288 45255</span>
                         </div>
                         <div class="contact-item">
                             <i class='bx bx-location-plus'></i>
-                            <span>Lagos, Nigeria</span>
+                            <span>Kwara state Ilorin, Nigeria</span>
                         </div>
                     </div>
                 </div>
-                <div class="contact-form">
-                    <form>
-                        <div class="form-group">
-                            <input type="text" placeholder="Your Name" required>
-                            <input type="email" placeholder="Your Email" required>
-                        </div>
-                        <input type="text" placeholder="Subject" required>
-                        <textarea placeholder="Your Message" rows="6" required></textarea>
-                        <button type="submit" class="btn">Send Message</button>
-                    </form>
+               <div class="contact-form">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdELl42Kn8Dg8d7OFEEVDxaRbg_qJ6g3iz-NthDl8FCugTpVg/viewform?embedded=true" width="640" height="821" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
                 </div>
             </div>
         </div>
     </section>
+    </section>
 
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; 2024 Oluwanifemi Oladimeji. All rights reserved.</p>
+            <p>&copy; 2025 PrimeXp. All rights reserved.</p>
             <div class="footer-social">
-                <a href="#"><i class='bx bxl-github'></i></a>
-                <a href="#"><i class='bx bxl-linkedin'></i></a>
-                <a href="#"><i class='bx bxl-instagram'></i></a>
+                <a href="https://github.com/knifeprime/Portfolio/tree/knifeprime-patch-1"><i class='bx bxl-github'></i></a>
+                <a href="https://www.linkedin.com/in/oluwanifemi-oladimeji/"><i class='bx bxl-linkedin'></i></a>
             </div>
         </div>
     </footer>
