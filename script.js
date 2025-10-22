@@ -34,125 +34,106 @@ window.addEventListener("scroll", () => {
   })
 })
 
-// Intersection Observer for animations
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: "0px 0px -50px 0px",
-}
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("fade-in-up")
-    }
-  })
-}, observerOptions)
-
-// Observe all sections and cards
+// Mobile menu toggle
 document.addEventListener("DOMContentLoaded", () => {
-  const elementsToAnimate = document.querySelectorAll(".project-card, .service-card, .skill-item, .stat-item")
-  elementsToAnimate.forEach((el) => observer.observe(el))
-})
+  const menuToggle = document.getElementById("menu-toggle")
+  const menuOverlay = document.querySelector(".menu-overlay")
+  const navLinks = document.querySelectorAll(".nav-menu a")
 
-// Parallax effect for background elements
-window.addEventListener("scroll", () => {
-  const scrolled = window.pageYOffset
-  const parallaxElements = document.querySelectorAll(".bars-animation")
-
-  parallaxElements.forEach((element) => {
-    const speed = 0.5
-    element.style.transform = `translateY(${scrolled * speed}px)`
-  })
-})
-
-// Dynamic typing effect enhancement
-const typingTexts = document.querySelectorAll(".home-info h2 span")
-const currentIndex = 0
-
-function enhanceTypingEffect() {
-  typingTexts.forEach((text, index) => {
-    text.addEventListener("animationiteration", () => {
-      if (index === currentIndex) {
-        text.style.color = "#008cff"
-        setTimeout(() => {
-          text.style.color = "transparent"
-        }, 3000)
-      }
-    })
-  })
-}
-
-// Initialize enhanced effects
-document.addEventListener("DOMContentLoaded", () => {
-  enhanceTypingEffect()
-
-  // Add loading animation completion
-  setTimeout(() => {
-    document.body.classList.add("loaded")
-  }, 2000)
-})
-
-// Contact form handling
-document.querySelector(".contact-form form").addEventListener("submit", function (e) {
-  e.preventDefault()
-
-  // Get form data
-  const formData = new FormData(this)
-  const name = this.querySelector('input[type="text"]').value
-  const email = this.querySelector('input[type="email"]').value
-  const subject = this.querySelector('input[placeholder="Subject"]').value
-  const message = this.querySelector("textarea").value
-
-  // Simple validation
-  if (name && email && subject && message) {
-    // Simulate form submission
-    const submitBtn = this.querySelector(".btn")
-    const originalText = submitBtn.textContent
-
-    submitBtn.textContent = "Sending..."
-    submitBtn.style.opacity = "0.7"
-
-    setTimeout(() => {
-      submitBtn.textContent = "Message Sent!"
-      submitBtn.style.background = "linear-gradient(45deg, #00ff88, #00cc6a)"
-
-      setTimeout(() => {
-        submitBtn.textContent = originalText
-        submitBtn.style.background = "linear-gradient(45deg, #008cff, #7ec5ff)"
-        submitBtn.style.opacity = "1"
-        this.reset()
-      }, 2000)
-    }, 1500)
+  // Detect touch devices and add a body class so CSS can adapt
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+  if (isTouchDevice) {
+    document.body.classList.add('is-touch')
   }
-})
 
-// Add hover effects for project cards
-document.querySelectorAll(".project-card").forEach((card) => {
-  card.addEventListener("mouseenter", function () {
-    this.style.transform = "translateY(-10px) rotateX(5deg)"
+  // Close menu when overlay is clicked
+  if (menuOverlay) {
+    menuOverlay.addEventListener("click", () => {
+      menuToggle.checked = false
+      document.body.style.overflow = ""
+    })
+  }
+
+  // Close menu when a nav link is clicked
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      menuToggle.checked = false
+      document.body.style.overflow = ""
+    })
   })
 
-  card.addEventListener("mouseleave", function () {
-    this.style.transform = "translateY(0) rotateX(0deg)"
-  })
-})
-
-// Skill bars animation on scroll
-const skillBars = document.querySelectorAll(".skill-progress")
-const skillObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = "skill-fill 2s ease-in-out forwards"
+  // Prevent body scroll when menu is open
+  if (menuToggle) {
+    menuToggle.addEventListener("change", () => {
+      if (menuToggle.checked) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = ""
       }
     })
-  },
-  { threshold: 0.5 },
-)
+  }
 
-skillBars.forEach((bar) => skillObserver.observe(bar))
+  // Initialize custom scroll features (skip heavier/desktop-only features on touch)
+  initCustomScrollWheel()
+  createScrollParticles()
+  window.addEventListener("scroll", handleScroll)
+  initMouseGlow()
+  updateScrollProgress()
 
-// Custom Scroll Indicator
+  // Only initialize the custom cursor on non-touch devices
+  if (!isTouchDevice) {
+    initCustomCursor()
+    // Add bubble particles on non-touch devices for visual depth
+    initBubbleParticles()
+  }
+
+  // Add tap-to-open behavior for project/code/video cards on touch devices or small screens.
+  // Some environments (devtools device emulation) may not set touch flags, so we also
+  // enable this behavior when the viewport is narrow.
+  const touchOrSmallScreen = () => isTouchDevice || window.innerWidth <= 940
+
+  const touchCards = document.querySelectorAll('.project-card, .video-card, .code-card')
+  touchCards.forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // If user clicked/tapped a real link inside the card, let the normal behavior happen
+      if (e.target.closest('a')) return
+
+      // Only activate on touch devices or small screens
+      if (!touchOrSmallScreen()) return
+
+      // Try to open the first meaningful link inside the card
+      const firstLink = card.querySelector('.project-links a, .code-links a, .project-link, a[href]')
+      // If there's no overlay visible yet, show the overlay (first tap)
+      if (!card.classList.contains('tapped')) {
+        // Add tapped to reveal overlay (CSS can target .tapped to show overlay)
+        card.classList.add('tapped')
+        // Remove tapped after a timeout so it doesn't stay forever
+        setTimeout(() => card.classList.remove('tapped'), 5000)
+        return
+      }
+
+      // If overlay was already tapped (second tap), follow the link
+      if (firstLink && firstLink.href) {
+        const target = firstLink.getAttribute('target')
+        if (target === '_blank') {
+          window.open(firstLink.href, '_blank')
+        } else {
+          window.location.assign(firstLink.href)
+        }
+      }
+    })
+  })
+
+  // Hide tapped state when clicking/tapping elsewhere
+  document.addEventListener('click', (e) => {
+    const anyTapped = document.querySelectorAll('.tapped')
+    anyTapped.forEach((t) => {
+      if (!t.contains(e.target)) t.classList.remove('tapped')
+    })
+  })
+})
+
+// Custom Scroll Progress
 function updateScrollProgress() {
   const scrollTop = window.pageYOffset
   const docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -170,7 +151,6 @@ function initCustomScrollWheel() {
   const scrollDots = document.querySelectorAll(".scroll-dot")
   const sections = document.querySelectorAll("section")
 
-  // Show/hide scroll wheel based on scroll position
   function toggleScrollWheel() {
     if (window.pageYOffset > 100) {
       scrollWheel.classList.add("visible")
@@ -179,7 +159,6 @@ function initCustomScrollWheel() {
     }
   }
 
-  // Update active dot based on current section
   function updateActiveDot() {
     let current = ""
     sections.forEach((section) => {
@@ -198,7 +177,6 @@ function initCustomScrollWheel() {
     })
   }
 
-  // Click handlers for scroll dots
   scrollDots.forEach((dot) => {
     dot.addEventListener("click", () => {
       const targetSection = dot.getAttribute("data-section")
@@ -215,32 +193,60 @@ function initCustomScrollWheel() {
   window.addEventListener("scroll", () => {
     toggleScrollWheel()
     updateActiveDot()
+    updateScrollProgress()
   })
 }
 
 // Background particle animation
 function createScrollParticles() {
   const bgAnimation = document.querySelector(".scroll-bg-animation")
+  if (!bgAnimation) return // nothing to do if container missing
 
   function createParticle() {
     const particle = document.createElement("div")
     particle.className = "scroll-particle"
     particle.style.left = Math.random() * 100 + "%"
+    particle.style.top = Math.random() * 100 + "%"
     particle.style.animationDelay = Math.random() * 8 + "s"
     particle.style.animationDuration = Math.random() * 4 + 6 + "s"
 
     bgAnimation.appendChild(particle)
 
-    // Remove particle after animation
     setTimeout(() => {
-      if (particle.parentNode) {
-        particle.parentNode.removeChild(particle)
-      }
+      if (particle.parentNode) particle.parentNode.removeChild(particle)
     }, 10000)
   }
 
-  // Create particles periodically
+  // create an initial particle immediately to make the animation obvious
+  createParticle()
   setInterval(createParticle, 500)
+}
+
+// Bubble particle animation (larger, slow rising bubbles)
+function initBubbleParticles() {
+  const container = document.querySelector('.scroll-bg-animation')
+  if (!container) return
+
+  function createBubble() {
+    const bubble = document.createElement('div')
+    bubble.className = 'bubble-particle'
+    const size = Math.random() * 60 + 20 // 20px - 80px
+    bubble.style.width = size + 'px'
+    bubble.style.height = size + 'px'
+    bubble.style.left = Math.random() * 100 + '%'
+    bubble.style.bottom = -Math.random() * 60 - 20 + 'px'
+    const duration = Math.random() * 12 + 8 // 8s - 20s
+    bubble.style.animationDuration = duration + 's'
+
+    container.appendChild(bubble)
+
+    setTimeout(() => {
+      if (bubble.parentNode) bubble.parentNode.removeChild(bubble)
+    }, (duration + 1) * 1000)
+  }
+
+  // create bubbles more sparsely for a subtle effect
+  setInterval(createBubble, 1200)
 }
 
 // Scroll wave and glow effects
@@ -283,7 +289,6 @@ function initCustomCursor() {
   cursor.className = "custom-cursor"
   document.body.appendChild(cursor)
 
-  // Create cursor trail elements
   const trailElements = []
   for (let i = 0; i < 8; i++) {
     const trail = document.createElement("div")
@@ -299,13 +304,11 @@ function initCustomCursor() {
   const trailX = []
   const trailY = []
 
-  // Initialize trail positions
   for (let i = 0; i < trailElements.length; i++) {
     trailX[i] = 0
     trailY[i] = 0
   }
 
-  // Mouse move handler
   document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX
     mouseY = e.clientY
@@ -314,7 +317,6 @@ function initCustomCursor() {
     cursor.style.top = mouseY + "px"
   })
 
-  // Animate cursor trail
   function animateTrail() {
     trailX[0] = mouseX
     trailY[0] = mouseY
@@ -331,7 +333,6 @@ function initCustomCursor() {
   }
   animateTrail()
 
-  // Hover effects for interactive elements
   const interactiveElements = document.querySelectorAll("a, button, .btn, .project-card, .service-card, .scroll-dot")
 
   interactiveElements.forEach((element) => {
@@ -344,7 +345,6 @@ function initCustomCursor() {
     })
   })
 
-  // Text cursor for input fields
   const textElements = document.querySelectorAll("input, textarea")
 
   textElements.forEach((element) => {
@@ -357,7 +357,6 @@ function initCustomCursor() {
     })
   })
 
-  // Click effect
   document.addEventListener("mousedown", () => {
     cursor.classList.add("click")
   })
@@ -366,7 +365,6 @@ function initCustomCursor() {
     cursor.classList.remove("click")
   })
 
-  // Hide cursor when leaving window
   document.addEventListener("mouseleave", () => {
     cursor.style.opacity = "0"
     trailElements.forEach((trail) => {
@@ -381,26 +379,3 @@ function initCustomCursor() {
     })
   })
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Dynamic typing effect enhancement
-  enhanceTypingEffect()
-
-  // Add loading animation completion
-  setTimeout(() => {
-    document.body.classList.add("loaded")
-  }, 2000)
-
-  // Observe all sections and cards
-  const elementsToAnimate = document.querySelectorAll(".project-card, .service-card, .skill-item, .stat-item")
-  elementsToAnimate.forEach((el) => observer.observe(el))
-
-  // Initialize custom scroll features
-  initCustomScrollWheel()
-  createScrollParticles()
-  window.addEventListener("scroll", handleScroll)
-  initMouseGlow()
-  updateScrollProgress()
-
-  initCustomCursor()
-})

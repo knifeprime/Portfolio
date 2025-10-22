@@ -1,4 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@media (max-width: 600px) {
+  .some-container {
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
 
 * {
   margin: 0;
@@ -10,6 +16,11 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Ensure anchor targets are scrolled into view below the fixed navbar */
+html {
+  scroll-padding-top: 110px;
 }
 
 /* Custom Cursor */
@@ -99,6 +110,20 @@ html {
   transform: translate(-50%, -50%);
 }
 
+/* If device is touch, show default cursor and hide custom cursor elements */
+.is-touch * {
+  cursor: auto !important;
+}
+
+.is-touch .custom-cursor,
+.is-touch .cursor-trail,
+.is-touch .custom-scroll-wheel,
+.is-touch .scroll-bg-animation,
+.is-touch .scroll-wave,
+.is-touch .scroll-glow {
+  display: none !important;
+}
+
 /* Hide default cursor on interactive elements */
 a,
 button,
@@ -144,13 +169,24 @@ a {
   align-items: center;
   z-index: 100;
   backdrop-filter: blur(10px);
-  background: rgba(31, 36, 45, 0.8);
-  border-bottom: 1px solid rgba(0, 140, 255, 0.1);
+  background: #1f242d;
+  border-bottom: 1px solid #1f242d;
   visibility: hidden;
   opacity: 0;
   animation: show-content 1.5s linear forwards;
-  animation-delay: 1.2s;
+  animation-delay: .2s;
   transition: all 0.3s ease;
+}
+
+/* Reserve top spacing for fixed navbar so sections don't hide behind it */
+html, body {
+  box-sizing: border-box;
+  /* prevent horizontal scrolling and the white strip on the right */
+  overflow-x: hidden;
+}
+/* Default desktop padding — adjusted at breakpoints below */
+body {
+  padding-top: 100px; /* leaves room for navbar and breathing space */
 }
 
 .navbar:hover {
@@ -167,30 +203,56 @@ a {
 .navbar .logo {
   font-size: 30px;
   font-weight: 700;
-  background: linear-gradient(45deg, #008cff, #7ec5ff);
+  /* restore original highlight gradient */
+  background: linear-gradient(45deg, #fff, #008cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  z-index: 101;
 }
 
-.navbar ul {
+/* Hide checkbox and hamburger by default */
+#menu-toggle {
+  display: none;
+}
+
+.hamburger {
+  display: none;
+  font-size: 28px;
+  color: #008cff;
+  cursor: pointer;
+  z-index: 101;
+  transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+  color: #7ec5ff;
+  transform: scale(1.1);
+}
+
+.close-btn {
+  display: none;
+}
+
+/* Desktop navigation styles */
+.navbar .nav-menu {
   display: flex;
 }
 
-.navbar ul li {
+.navbar .nav-menu li {
   list-style: none;
   margin-left: 35px;
   position: relative;
 }
 
-.navbar ul li a {
+.navbar .nav-menu li a {
   font-size: 20px;
   font-weight: 500;
   transition: all 0.3s ease;
   position: relative;
 }
 
-.navbar ul li a::after {
+.navbar .nav-menu li a::after {
   content: "";
   position: absolute;
   bottom: -5px;
@@ -201,15 +263,274 @@ a {
   transition: width 0.3s ease;
 }
 
-.navbar ul li:hover a,
-.navbar ul li.active a {
+.navbar .nav-menu li:hover a,
+.navbar .nav-menu li.active a {
   color: #008cff;
   transform: translateY(-2px);
 }
 
-.navbar ul li:hover a::after,
-.navbar ul li.active a::after {
+.navbar .nav-menu li:hover a::after,
+.navbar .nav-menu li.active a::after {
   width: 100%;
+}
+
+/* Mobile menu overlay */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 98;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* avoid blocking taps when hidden */
+}
+
+/* Mobile responsive styles - Sidebar implementation */
+@media (max-width: 940px) {
+  .hamburger {
+    display: block;
+  }
+
+  .navbar .nav-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+  width: 280px;
+  min-height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #0f1419 0%, #1f242d 100%);
+    box-shadow: 5px 0 20px rgba(0, 140, 255, 0.3);
+    z-index: 99;
+    flex-direction: column;
+    padding: 80px 0 30px;
+    transition: left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow-y: auto;
+  }
+
+  .close-btn {
+    display: block;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 28px;
+    color: #008cff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    color: #7ec5ff;
+    transform: rotate(90deg);
+  }
+
+  .navbar .nav-menu li {
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 140, 255, 0.1);
+  }
+
+  .navbar .nav-menu li a {
+    display: block;
+    padding: 20px 30px;
+    font-size: 18px;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .navbar .nav-menu li a::after {
+    display: none;
+  }
+
+  .navbar .nav-menu li:hover {
+    background: rgba(0, 140, 255, 0.1);
+  }
+
+  .navbar .nav-menu li:hover a {
+    color: #008cff;
+    transform: translateX(10px);
+  }
+
+  .navbar .nav-menu li.active {
+    background: rgba(0, 140, 255, 0.15);
+    border-left: 4px solid #008cff;
+  }
+
+  /* Show sidebar when checkbox is checked */
+  #menu-toggle:checked ~ .nav-menu {
+    left: 0;
+  }
+
+  #menu-toggle:checked ~ .menu-overlay {
+    display: block;
+    opacity: 1;
+    pointer-events: auto; /* allow overlay to receive clicks when active */
+  }
+
+  /* Close menu when overlay is clicked */
+  /* keep overlay not blocking until menu is active */
+  .menu-overlay {
+    display: block;
+    pointer-events: none;
+  }
+}
+
+/* Mobile-first refinements */
+@media (max-width: 768px) {
+  html, body {
+    font-size: 15px;
+  }
+
+  /* On small screens reduce the reserved top space for navbar */
+  body {
+    padding-top: 70px;
+  }
+
+  .home {
+    flex-direction: column-reverse;
+    padding: 80px 6% 40px;
+    gap: 30px;
+    height: auto;
+    text-align: center;
+  }
+
+  .home-info h1 {
+    font-size: 36px;
+  }
+
+  .home-info h2 {
+    font-size: 20px;
+  }
+
+  .home-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .home-img img, .project-image img, .video-thumbnail img, .code-preview img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .projects-grid, .videos-grid, .code-grid, .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 6%;
+  }
+
+  .projects-content, .videos-content, .code-content, .services-content, .about-content, .contact-content {
+    padding: 40px 0;
+  }
+
+  .navbar {
+    padding: 16px 6%;
+  }
+
+  .hamburger {
+    font-size: 24px;
+  }
+
+  /* Make the scroll indicator thinner on mobile */
+  .scroll-indicator {
+    right: 8px;
+    width: 6px;
+    left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  body { padding-top: 64px }
+}
+
+/* Make full-screen sections use min-height instead of fixed 100vh to avoid overlap with navbar/toolbars */
+.home, section {
+  min-height: calc(100vh - 120px);
+}
+
+/* For small screens allow sections to grow naturally */
+@media (max-width: 768px) {
+  .home, section {
+    min-height: auto;
+  }
+}
+
+/* Responsive card media: use aspect-ratio where available and allow flexible heights */
+.project-image, .video-thumbnail, .code-preview {
+  height: auto;
+  min-height: 160px;
+  max-height: 420px;
+  aspect-ratio: 16/9;
+}
+
+.project-image img, .video-thumbnail img, .code-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ensure grids collapse smoothly: one column on small screens, two columns on tablets */
+.projects-grid, .videos-grid, .code-grid, .services-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+@media (max-width: 940px) {
+  .projects-grid, .videos-grid, .code-grid, .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reduce transform hover lifts on small screens to avoid overflow */
+@media (max-width: 768px) {
+  .project-card:hover, .video-card:hover, .code-card:hover, .service-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Ensure footer doesn't overlap content */
+.footer { padding: 30px 6%; z-index: 10 }
+
+/* Avoid absolutely positioned decorative elements from overflowing and blocking content */
+.bars-animation, .scroll-wave, .scroll-glow {
+  pointer-events: none;
+}
+
+/* Make contact iframe fully responsive on very small widths */
+@media (max-width: 420px) {
+  .contact-form iframe { height: 520px }
+}
+
+@media (max-width: 480px) {
+  .home-info h1 { font-size: 28px }
+  .home-info h2 { font-size: 18px }
+  .navbar .nav-menu li a { font-size: 16px }
+  .navbar { padding: 12px 5% }
+}
+
+/* Responsive iframe for contact form */
+.contact-form iframe {
+  width: 100%;
+  max-width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* Improve tappable areas for mobile */
+.project-card, .video-card, .code-card, .service-card {
+  touch-action: manipulation;
+}
+
+/* Ensure scroll wheel dots are hidden on small screens to reduce clutter */
+@media (max-width: 940px) {
+  .custom-scroll-wheel { display: none }
 }
 
 /* Enhanced home section with better animations */
@@ -217,7 +538,7 @@ a {
   display: flex;
   align-items: center;
   gap: 50px;
-  height: 100vh;
+  min-height: calc(100vh - 120px);
   padding: 60px 9% 0;
   color: #fff;
   visibility: hidden;
@@ -255,7 +576,7 @@ a {
   position: relative;
   display: inline-block;
   color: transparent;
-  -webkit-text-stroke: 0.7px #008cff;
+  -webkit-text-stroke: .7px #008cff;
   animation: display-text 16s linear infinite;
   animation-delay: calc(-4s * var(--i));
 }
@@ -389,6 +710,31 @@ a {
   overflow: hidden;
 }
 
+/* Scale down large circular image on small screens */
+@media (max-width: 940px) {
+  .home-img .img-box {
+    width: 46vw;
+    height: 46vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-img .img-box { width: 64vw; height: 64vw }
+}
+
+/* Constrain content widths and add spacing to prevent overlaps */
+.projects-content, .videos-content, .code-content, .services-content, .about-content, .contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 6%;
+}
+
+@media (max-width: 768px) {
+  .projects-content, .videos-content, .code-content, .services-content, .about-content, .contact-content {
+    padding: 40px 6%;
+  }
+}
+
 .home-img .img-box::before,
 .home-img .img-box::after {
   content: "";
@@ -443,20 +789,31 @@ a {
 
 /* Added section styles for new content */
 section {
-  padding: 100px 9%;
-  min-height: 100vh;
+  padding: 80px 9%;
+  min-height: calc(100vh - 160px);
   display: flex;
   align-items: center;
+  flex-direction: column;
 }
 
 .section-title {
   font-size: 48px;
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   background: linear-gradient(45deg, #fff, #008cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+@media (max-width: 940px) {
+  section { padding: 60px 6% }
+  .section-title { font-size: 32px; margin-bottom: 24px }
+}
+
+@media (max-width: 480px) {
+  section { padding: 40px 5% }
+  .section-title { font-size: 26px }
 }
 
 .section-title span {
@@ -490,7 +847,7 @@ section {
   line-height: 1.8;
   margin-bottom: 20px;
   opacity: 0.9;
-  color: #fff;
+  color: #ffffff;
 }
 
 .skills {
@@ -596,7 +953,9 @@ section {
 .project-image {
   position: relative;
   overflow: hidden;
-  height: 250px;
+  min-height: 180px;
+  height: auto;
+  aspect-ratio: 16/9;
 }
 
 .project-image img {
@@ -622,10 +981,18 @@ section {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none; /* don't block clicks when invisible */
 }
 
 .project-card:hover .project-overlay {
   opacity: 1;
+  pointer-events: auto; /* enable clicks when visible */
+}
+
+/* When tapped on touch devices, reveal overlay similarly to hover */
+.project-card.tapped .project-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .project-links {
@@ -684,7 +1051,237 @@ section {
   font-size: 12px;
   color: #008cff;
 }
+.videos {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+}
 
+.videos-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.video-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 140, 255, 0.2);
+}
+
+.video-thumbnail {
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  height: auto;
+  aspect-ratio: 16/9;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.video-card:hover .video-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.video-card.tapped .video-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.video-info {
+  padding: 25px;
+}
+
+.video-info h3 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.video-info p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.video-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.video-tech span {
+  background: linear-gradient(45deg, #008cff, #7ec5ff);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Code Section Styles */
+.code {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.code-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.code-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.code-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+}
+
+.code-preview {
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+  height: auto;
+  aspect-ratio: 16/9;
+}
+
+.code-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.code-card:hover .code-preview img {
+  transform: scale(1.1);
+}
+
+.code-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.code-card:hover .code-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.code-card.tapped .code-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.code-links {
+  display: flex;
+  gap: 20px;
+}
+
+.code-link {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(45deg, #00ff88, #00cc6a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.code-link:hover {
+  transform: scale(1.1);
+}
+
+.code-info {
+  padding: 25px;
+}
+
+.code-info h3 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.code-info p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.code-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.code-tech span {
+  background: linear-gradient(45deg, #00ff88, #00cc6a);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
 /* Services section styles */
 .services {
   background: linear-gradient(135deg, #2a2f3a 0%, #1f242d 100%);
@@ -692,6 +1289,7 @@ section {
 
 .services-content {
   width: 100%;
+  color: #fff;
 }
 
 .services-grid {
@@ -788,6 +1386,7 @@ section {
   line-height: 1.8;
   margin-bottom: 30px;
   opacity: 0.9;
+  color: #ffffff;
 }
 
 .contact-details {
@@ -801,6 +1400,7 @@ section {
   align-items: center;
   gap: 15px;
   font-size: 16px;
+  color: #fff;
 }
 
 .contact-item i {
@@ -865,6 +1465,7 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #fff;
 }
 
 .footer-social {
@@ -1015,17 +1616,50 @@ section {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -2;
+  /* place behind UI but above default page background */
+  z-index: 0;
   overflow: hidden;
 }
 
 .scroll-particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(0, 140, 255, 0.3);
+  width: 6px;
+  height: 6px;
+  background: rgba(0, 140, 255, 0.45);
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
   border-radius: 50%;
   animation: float-particle 8s linear infinite;
+}
+
+/* Bubble particles (larger, slow rising bubbles) */
+.bubble-particle {
+  position: absolute;
+  bottom: -40px; /* start slightly below viewport */
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0.15) 40%, rgba(0,140,255,0.08) 70%);
+  box-shadow: 0 8px 18px rgba(0,140,255,0.08), inset -3px -6px 12px rgba(255,255,255,0.15);
+  opacity: 0.6;
+  transform: translateY(0) scale(1);
+  animation: bubble-rise linear infinite;
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.95);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-45vh) translateX(15px) scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-120vh) translateX(-20px) scale(1.15);
+    opacity: 0;
+  }
 }
 
 @keyframes float-particle {
@@ -1116,10 +1750,6 @@ section {
     padding: 20px 5%;
   }
 
-  .navbar ul {
-    display: none;
-  }
-
   .home {
     flex-direction: column;
     text-align: center;
@@ -1128,6 +1758,10 @@ section {
 
   .home-info h1 {
     font-size: 40px;
+    background: linear-gradient(45deg, #fff, #008cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .home-info h2 {
