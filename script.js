@@ -40,6 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuOverlay = document.querySelector(".menu-overlay")
   const navLinks = document.querySelectorAll(".nav-menu a")
 
+  // Detect touch devices and add a body class so CSS can adapt
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+  if (isTouchDevice) {
+    document.body.classList.add('is-touch')
+  }
+
   // Close menu when overlay is clicked
   if (menuOverlay) {
     menuOverlay.addEventListener("click", () => {
@@ -57,21 +63,74 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   // Prevent body scroll when menu is open
-  menuToggle.addEventListener("change", () => {
-    if (menuToggle.checked) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
-  })
+  if (menuToggle) {
+    menuToggle.addEventListener("change", () => {
+      if (menuToggle.checked) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = ""
+      }
+    })
+  }
 
-  // Initialize custom scroll features
+  // Initialize custom scroll features (skip heavier/desktop-only features on touch)
   initCustomScrollWheel()
   createScrollParticles()
   window.addEventListener("scroll", handleScroll)
   initMouseGlow()
   updateScrollProgress()
-  initCustomCursor()
+
+  // Only initialize the custom cursor on non-touch devices
+  if (!isTouchDevice) {
+    initCustomCursor()
+    // Add bubble particles on non-touch devices for visual depth
+    initBubbleParticles()
+  }
+
+  // Add tap-to-open behavior for project/code/video cards on touch devices or small screens.
+  // Some environments (devtools device emulation) may not set touch flags, so we also
+  // enable this behavior when the viewport is narrow.
+  const touchOrSmallScreen = () => isTouchDevice || window.innerWidth <= 940
+
+  const touchCards = document.querySelectorAll('.project-card, .video-card, .code-card')
+  touchCards.forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // If user clicked/tapped a real link inside the card, let the normal behavior happen
+      if (e.target.closest('a')) return
+
+      // Only activate on touch devices or small screens
+      if (!touchOrSmallScreen()) return
+
+      // Try to open the first meaningful link inside the card
+      const firstLink = card.querySelector('.project-links a, .code-links a, .project-link, a[href]')
+      // If there's no overlay visible yet, show the overlay (first tap)
+      if (!card.classList.contains('tapped')) {
+        // Add tapped to reveal overlay (CSS can target .tapped to show overlay)
+        card.classList.add('tapped')
+        // Remove tapped after a timeout so it doesn't stay forever
+        setTimeout(() => card.classList.remove('tapped'), 5000)
+        return
+      }
+
+      // If overlay was already tapped (second tap), follow the link
+      if (firstLink && firstLink.href) {
+        const target = firstLink.getAttribute('target')
+        if (target === '_blank') {
+          window.open(firstLink.href, '_blank')
+        } else {
+          window.location.assign(firstLink.href)
+        }
+      }
+    })
+  })
+
+  // Hide tapped state when clicking/tapping elsewhere
+  document.addEventListener('click', (e) => {
+    const anyTapped = document.querySelectorAll('.tapped')
+    anyTapped.forEach((t) => {
+      if (!t.contains(e.target)) t.classList.remove('tapped')
+    })
+  })
 })
 
 // Custom Scroll Progress
@@ -141,24 +200,53 @@ function initCustomScrollWheel() {
 // Background particle animation
 function createScrollParticles() {
   const bgAnimation = document.querySelector(".scroll-bg-animation")
+  if (!bgAnimation) return // nothing to do if container missing
 
   function createParticle() {
     const particle = document.createElement("div")
     particle.className = "scroll-particle"
     particle.style.left = Math.random() * 100 + "%"
+    particle.style.top = Math.random() * 100 + "%"
     particle.style.animationDelay = Math.random() * 8 + "s"
     particle.style.animationDuration = Math.random() * 4 + 6 + "s"
 
     bgAnimation.appendChild(particle)
 
     setTimeout(() => {
-      if (particle.parentNode) {
-        particle.parentNode.removeChild(particle)
-      }
+      if (particle.parentNode) particle.parentNode.removeChild(particle)
     }, 10000)
   }
 
+  // create an initial particle immediately to make the animation obvious
+  createParticle()
   setInterval(createParticle, 500)
+}
+
+// Bubble particle animation (larger, slow rising bubbles)
+function initBubbleParticles() {
+  const container = document.querySelector('.scroll-bg-animation')
+  if (!container) return
+
+  function createBubble() {
+    const bubble = document.createElement('div')
+    bubble.className = 'bubble-particle'
+    const size = Math.random() * 60 + 20 // 20px - 80px
+    bubble.style.width = size + 'px'
+    bubble.style.height = size + 'px'
+    bubble.style.left = Math.random() * 100 + '%'
+    bubble.style.bottom = -Math.random() * 60 - 20 + 'px'
+    const duration = Math.random() * 12 + 8 // 8s - 20s
+    bubble.style.animationDuration = duration + 's'
+
+    container.appendChild(bubble)
+
+    setTimeout(() => {
+      if (bubble.parentNode) bubble.parentNode.removeChild(bubble)
+    }, (duration + 1) * 1000)
+  }
+
+  // create bubbles more sparsely for a subtle effect
+  setInterval(createBubble, 1200)
 }
 
 // Scroll wave and glow effects

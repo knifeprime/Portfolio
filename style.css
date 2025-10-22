@@ -1,4 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@media (max-width: 600px) {
+  .some-container {
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
 
 * {
   margin: 0;
@@ -97,6 +103,20 @@ html {
   z-index: 9998;
   transition: all 0.2s ease;
   transform: translate(-50%, -50%);
+}
+
+/* If device is touch, show default cursor and hide custom cursor elements */
+.is-touch * {
+  cursor: auto !important;
+}
+
+.is-touch .custom-cursor,
+.is-touch .cursor-trail,
+.is-touch .custom-scroll-wheel,
+.is-touch .scroll-bg-animation,
+.is-touch .scroll-wave,
+.is-touch .scroll-glow {
+  display: none !important;
 }
 
 /* Hide default cursor on interactive elements */
@@ -249,6 +269,7 @@ a {
   z-index: 98;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none; /* avoid blocking taps when hidden */
 }
 
 /* Mobile responsive styles - Sidebar implementation */
@@ -329,12 +350,101 @@ a {
   #menu-toggle:checked ~ .menu-overlay {
     display: block;
     opacity: 1;
+    pointer-events: auto; /* allow overlay to receive clicks when active */
   }
 
   /* Close menu when overlay is clicked */
+  /* keep overlay not blocking until menu is active */
   .menu-overlay {
     display: block;
+    pointer-events: none;
   }
+}
+
+/* Mobile-first refinements */
+@media (max-width: 768px) {
+  html, body {
+    font-size: 15px;
+  }
+
+  .home {
+    flex-direction: column-reverse;
+    padding: 80px 6% 40px;
+    gap: 30px;
+    height: auto;
+    text-align: center;
+  }
+
+  .home-info h1 {
+    font-size: 36px;
+  }
+
+  .home-info h2 {
+    font-size: 20px;
+  }
+
+  .home-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .home-img img, .project-image img, .video-thumbnail img, .code-preview img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .projects-grid, .videos-grid, .code-grid, .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 6%;
+  }
+
+  .projects-content, .videos-content, .code-content, .services-content, .about-content, .contact-content {
+    padding: 40px 0;
+  }
+
+  .navbar {
+    padding: 16px 6%;
+  }
+
+  .hamburger {
+    font-size: 24px;
+  }
+
+  /* Make the scroll indicator thinner on mobile */
+  .scroll-indicator {
+    right: 8px;
+    width: 6px;
+    left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-info h1 { font-size: 28px }
+  .home-info h2 { font-size: 18px }
+  .navbar .nav-menu li a { font-size: 16px }
+  .navbar { padding: 12px 5% }
+}
+
+/* Responsive iframe for contact form */
+.contact-form iframe {
+  width: 100%;
+  max-width: 100%;
+  height: 600px;
+  border: none;
+}
+
+/* Improve tappable areas for mobile */
+.project-card, .video-card, .code-card, .service-card {
+  touch-action: manipulation;
+}
+
+/* Ensure scroll wheel dots are hidden on small screens to reduce clutter */
+@media (max-width: 940px) {
+  .custom-scroll-wheel { display: none }
 }
 
 /* Enhanced home section with better animations */
@@ -747,10 +857,18 @@ section {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none; /* don't block clicks when invisible */
 }
 
 .project-card:hover .project-overlay {
   opacity: 1;
+  pointer-events: auto; /* enable clicks when visible */
+}
+
+/* When tapped on touch devices, reveal overlay similarly to hover */
+.project-card.tapped .project-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .project-links {
@@ -865,10 +983,17 @@ section {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .video-card:hover .video-overlay {
   opacity: 1;
+  pointer-events: auto;
+}
+
+.video-card.tapped .video-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .video-info {
@@ -963,10 +1088,17 @@ section {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .code-card:hover .code-overlay {
   opacity: 1;
+  pointer-events: auto;
+}
+
+.code-card.tapped .code-overlay {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .code-links {
@@ -1356,17 +1488,50 @@ section {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -2;
+  /* place behind UI but above default page background */
+  z-index: 0;
   overflow: hidden;
 }
 
 .scroll-particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: rgba(0, 140, 255, 0.3);
+  width: 6px;
+  height: 6px;
+  background: rgba(0, 140, 255, 0.45);
+  box-shadow: 0 0 8px rgba(0, 140, 255, 0.25);
   border-radius: 50%;
   animation: float-particle 8s linear infinite;
+}
+
+/* Bubble particles (larger, slow rising bubbles) */
+.bubble-particle {
+  position: absolute;
+  bottom: -40px; /* start slightly below viewport */
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0.15) 40%, rgba(0,140,255,0.08) 70%);
+  box-shadow: 0 8px 18px rgba(0,140,255,0.08), inset -3px -6px 12px rgba(255,255,255,0.15);
+  opacity: 0.6;
+  transform: translateY(0) scale(1);
+  animation: bubble-rise linear infinite;
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.95);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-45vh) translateX(15px) scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-120vh) translateX(-20px) scale(1.15);
+    opacity: 0;
+  }
 }
 
 @keyframes float-particle {
