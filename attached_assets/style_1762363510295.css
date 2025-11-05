@@ -18,54 +18,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  background: #1f242d;
-  color: #fff;
-  overflow-x: hidden;
-  min-height: 100vh;
-  position: relative;
-  /* keep content visible immediately; overlay will cover and reveal */
-  opacity: 1;
-}
-/* Animation Styles: clean reveal overlay (single definition) */
-.reveal-overlay {
-  position: fixed;
-  inset: 0;
-  background: #0a0f16;
-  z-index: 9999;
-  pointer-events: none;
-  /* start covering with a large circle centered near bottom */
-  clip-path: circle(150% at 50% 100%);
-  animation: overlayReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* Hide by class after animation completes */
-.reveal-overlay.hidden { display: none; }
-
-/* Ensure main content sits above the overlay */
-main, .page-content { position: relative; z-index: 2; }
-
-/* Slight content fade after overlay starts - removed to ensure content visible beneath overlay */
-/* body fade removed: content should be visible immediately; overlay reveals it. */
-
-@keyframes overlayReveal {
-  0% { clip-path: circle(150% at 50% 100%); opacity: 1; transform: translateY(0) scale(1); }
-  65% { clip-path: circle(45% at 50% 65%); opacity: 1; }
-  100% { clip-path: circle(0% at 50% 50%); opacity: 0; transform: translateY(-120%) scale(1.02); }
-}
-
-/* Content fade-in after reveal finishes */
-main {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-body.revealed main {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* Custom Cursor */
 .custom-cursor {
   position: fixed;
@@ -206,15 +158,18 @@ a {
   left: 0;
   top: 0;
   width: 100%;
-  padding: 20px 9%;
+  padding: 25px 9%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10002;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  background: rgba(31, 36, 45, 0.9);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background: rgba(31, 36, 45, 0.8);
   border-bottom: 1px solid rgba(0, 140, 255, 0.1);
+  visibility: hidden;
+  opacity: 0;
+  animation: show-content 1.5s linear forwards;
+  animation-delay: 1.2s;
   transition: all 0.3s ease;
 }
 
@@ -414,19 +369,18 @@ a {
 
   .home {
     flex-direction: column-reverse;
-    padding: 100px 6% 50px;
-    gap: 40px;
+    padding: 80px 6% 40px;
+    gap: 30px;
     height: auto;
     text-align: center;
   }
 
-  .home-info {
-    width: 100%;
+  .home-info h1 {
+    font-size: 36px;
   }
 
-  .home-info .btn-sci {
-    justify-content: center;
-    flex-wrap: wrap;
+  .home-info h2 {
+    font-size: 20px;
   }
 
   .home-img {
@@ -435,170 +389,44 @@ a {
     justify-content: center;
   }
 
-  .home-img .img-box {
-    width: 70vw;
-    height: 70vw;
-    max-width: 350px;
-    max-height: 350px;
-  }
-
   .home-img img, .project-image img, .video-thumbnail img, .code-preview img {
     max-width: 100%;
     height: auto;
     object-fit: cover;
   }
 
-  .projects-grid, .videos-grid, .code-grid {
+  .projects-grid, .videos-grid, .code-grid, .services-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  .services-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+    padding: 0 6%;
   }
 
   .projects-content, .videos-content, .code-content, .services-content, .about-content, .contact-content {
-    padding: 50px 6%;
+    padding: 40px 0;
   }
 
   .navbar {
-    padding: 18px 6%;
+    padding: 16px 6%;
   }
 
   .hamburger {
     font-size: 24px;
   }
 
+  /* Make the scroll indicator thinner on mobile */
   .scroll-indicator {
-    position: fixed;
     right: 8px;
-    top: 84px;
-    width: 4px;
+    width: 6px;
     left: auto;
-    z-index: 10001;
   }
-
-  section {
-    padding: 60px 6% 50px;
-  }
-
-  .about-info {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .contact-info {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .btn {
-    padding: 12px 30px;
-    font-size: 15px;
-  }
-}
-
-/* Force header and navigation controls to stay fixed and visible while scrolling.
-   These rules are overrides to ensure no other media-query or transform-created
-   stacking context hides or repositions them. */
-.navbar {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  z-index: 10002 !important;
-}
-
-.custom-scroll-wheel {
-  position: fixed !important;
-  right: 24px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  z-index: 10003 !important;
-  display: flex !important;
-}
-
-.scroll-indicator {
-  position: fixed !important;
-  right: 8px !important;
-  top: 84px !important;
-  z-index: 10001 !important;
-}
-
-@media (max-width: 600px) {
-  /* On small screens push the dots down a bit to avoid overlapping header controls */
-  .custom-scroll-wheel { right: 14px !important; top: 55% !important }
-  .scroll-indicator { top: 72px !important }
-  .navbar { padding: 12px 5% !important }
 }
 
 @media (max-width: 480px) {
-  .navbar { padding: 15px 5% }
+  .home-info h1 { font-size: 28px }
+  .home-info h2 { font-size: 18px }
   .navbar .nav-menu li a { font-size: 16px }
-  
-  .home {
-    padding: 90px 5% 40px;
-    gap: 30px;
-  }
-
-  .home-img .img-box {
-    width: 80vw;
-    height: 80vw;
-  }
-
-  section {
-    padding: 50px 5% 40px;
-  }
-
-  .section-title {
-    margin-bottom: 35px;
-  }
-
-  .projects-grid, .videos-grid, .code-grid {
-    gap: 20px;
-  }
-
-  .service-card {
-    padding: 30px 20px;
-  }
-
-  .contact-form {
-    padding: 25px;
-  }
-}
-
-/* Large desktop and ultrawide screens */
-@media (min-width: 1920px) {
-  .home, section {
-    max-width: 1800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .navbar {
-    padding: 20px calc((100% - 1800px) / 2 + 100px);
-  }
-
-  .projects-grid, .videos-grid, .code-grid {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  }
-}
-
-/* Tablet landscape */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .home {
-    padding: 100px 7% 60px;
-  }
-
-  .projects-grid, .videos-grid, .code-grid {
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  }
-
-  .about-info {
-    grid-template-columns: 1.5fr 1fr;
-  }
+  .navbar { padding: 12px 5% }
 }
 
 /* Responsive iframe for contact form */
@@ -624,14 +452,17 @@ a {
   display: flex;
   align-items: center;
   gap: 50px;
-  min-height: 100vh;
-  height: auto;
-  padding: 100px 9% 60px;
+  height: 100vh;
+  padding: 60px 9% 0;
   color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  animation: show-content 1.5s linear forwards;
+  animation-delay: 1.6s;
 }
 
 .home-info h1 {
-  font-size: clamp(32px, 8vw, 60px);
+  font-size: 60px;
   background: linear-gradient(45deg, #fff, #008cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -645,14 +476,14 @@ a {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
   }
 }
 
 .home-info h2 {
   display: inline-block;
-  font-size: clamp(20px, 4vw, 32px);
-  margin-top: 10px;
+  font-size: 32px;
+  margin-top: -10px;
 }
 
 .home-info h2 span {
@@ -695,10 +526,9 @@ a {
 
 .home-info p {
   font-size: 16px;
-  margin: 20px 0 30px;
-  line-height: 1.8;
+  margin: 10px 0 25px;
+  line-height: 1.6;
   opacity: 0.9;
-  max-width: 600px;
 }
 
 .home-info .btn-sci {
@@ -709,15 +539,15 @@ a {
 
 .btn {
   display: inline-block;
-  padding: 14px 40px;
-  background: linear-gradient(135deg, #008cff, #00a8ff);
-  border: 2px solid transparent;
-  border-radius: 50px;
-  box-shadow: 0 4px 20px rgba(0, 140, 255, 0.4);
+  padding: 12px 35px;
+  background: linear-gradient(45deg, #008cff, #7ec5ff);
+  border: 2px solid #008cff;
+  border-radius: 40px;
+  box-shadow: 0 0 20px rgba(0, 140, 255, 0.3);
   font-size: 16px;
   color: #fff;
   font-weight: 600;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -738,9 +568,8 @@ a {
 }
 
 .btn:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 35px rgba(0, 140, 255, 0.6);
-  background: linear-gradient(135deg, #00a8ff, #008cff);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 30px rgba(0, 140, 255, 0.5);
 }
 
 .home-info .btn-sci .sci {
@@ -849,16 +678,16 @@ a {
 
 /* Added section styles for new content */
 section {
-  padding: 80px 9% 60px;
-  min-height: auto;
+  padding: 100px 9%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .section-title {
-  font-size: clamp(32px, 6vw, 48px);
+  font-size: 48px;
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   background: linear-gradient(45deg, #fff, #008cff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -893,8 +722,8 @@ section {
 
 .about-text p {
   font-size: 16px;
-  line-height: 1.9;
-  margin-bottom: 22px;
+  line-height: 1.8;
+  margin-bottom: 20px;
   opacity: 0.9;
   color: #ffffff;
 }
@@ -955,8 +784,8 @@ section {
 }
 
 .stat-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 140, 255, 0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 140, 255, 0.2);
 }
 
 .stat-item h3 {
@@ -995,9 +824,8 @@ section {
 }
 
 .project-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 140, 255, 0.25);
-  border-color: rgba(0, 140, 255, 0.3);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 140, 255, 0.2);
 }
 
 .project-image {
@@ -1079,9 +907,9 @@ section {
 
 .project-info p {
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.6;
   margin-bottom: 20px;
-  opacity: 0.88;
+  opacity: 0.9;
   color: white;
 }
 
@@ -1098,41 +926,6 @@ section {
   border-radius: 20px;
   font-size: 12px;
   color: #008cff;
-}
-
-/* Coming Soon Project Card Styles */
-.project-card.coming-soon .project-image {
-  background: linear-gradient(135deg, rgba(0, 140, 255, 0.1) 0%, rgba(126, 197, 255, 0.05) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.coming-soon-content {
-  font-size: 80px;
-  color: rgba(0, 140, 255, 0.3);
-  animation: pulse-icon 2s ease-in-out infinite;
-}
-
-@keyframes pulse-icon {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.6;
-  }
-}
-
-.project-card.coming-soon .project-info h3 {
-  color: #7ec5ff;
-}
-
-.project-card.coming-soon .project-tech span {
-  background: rgba(126, 197, 255, 0.15);
-  border-color: rgba(126, 197, 255, 0.4);
-  color: #7ec5ff;
 }
 .videos {
   padding: 100px 0;
@@ -1161,9 +954,8 @@ section {
 }
 
 .video-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 140, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 140, 255, 0.2);
 }
 
 .video-thumbnail {
@@ -1263,9 +1055,8 @@ section {
 }
 
 .code-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 255, 136, 0.25);
-  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
 }
 
 .code-preview {
@@ -1406,9 +1197,8 @@ section {
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(0, 140, 255, 0.25);
-  border-color: rgba(0, 140, 255, 0.25);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 140, 255, 0.2);
 }
 
 .service-icon {
@@ -1634,7 +1424,7 @@ section {
   right: 30px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10003;
+  z-index: 999;
   display: flex;
   flex-direction: column;
   gap: 15px;

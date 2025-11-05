@@ -36,50 +36,6 @@ window.addEventListener("scroll", () => {
 
 // Mobile menu toggle
 document.addEventListener("DOMContentLoaded", () => {
-  // Ensure fixed UI elements are direct children of body so CSS `position: fixed`
-  // behaves correctly in all browsers (Edge can create containing blocks when
-  // ancestors have transform/filter). Moving them to a top-level fixed container
-  // prevents them from being affected by page transforms.
-  (function ensureFixedUI() {
-    try {
-      const selectors = ['.navbar', '.custom-scroll-wheel', '.scroll-indicator']
-      let container = document.getElementById('fixed-ui-container')
-      if (!container) {
-        container = document.createElement('div')
-        container.id = 'fixed-ui-container'
-        container.style.position = 'fixed'
-        container.style.inset = '0'
-        container.style.zIndex = '10005'
-        container.style.pointerEvents = 'none'
-        document.body.appendChild(container)
-      }
-
-      selectors.forEach((sel) => {
-        const el = document.querySelector(sel)
-        if (el && container && el.parentNode !== container) {
-          // Keep element interactive
-          el.style.pointerEvents = 'auto'
-          container.appendChild(el)
-        }
-      })
-    } catch (e) {
-      // non-fatal
-      console.warn('ensureFixedUI failed', e)
-    }
-  })()
-
-  // When the page loads or is refreshed, jump to #home so users start at the top.
-  // Use replaceState so we don't add an extra history entry.
-  try {
-    const home = document.getElementById('home')
-    if (home) {
-      history.replaceState(null, '', '#home')
-      // scroll without smooth to avoid interfering with reveal animation
-      home.scrollIntoView({ behavior: 'auto', block: 'start' })
-    }
-  } catch (e) {
-    console.warn('scroll to #home failed', e)
-  }
   const menuToggle = document.getElementById("menu-toggle")
   const menuOverlay = document.querySelector(".menu-overlay")
   const navLinks = document.querySelectorAll(".nav-menu a")
@@ -189,27 +145,6 @@ function updateScrollProgress() {
   }
 }
 
-// Remove reveal overlay after its animation finishes so it doesn't block interactions
-document.addEventListener('DOMContentLoaded', () => {
-  const overlay = document.querySelector('.reveal-overlay')
-  if (!overlay) return
-  overlay.addEventListener('animationend', () => {
-    // add revealed class so main can fade in smoothly
-    try { document.body.classList.add('revealed') } catch (e) {}
-    // remove overlay shortly after to allow the fade transition to run
-    setTimeout(() => {
-      try { overlay.remove() } catch (e) { overlay.style.display = 'none' }
-    }, 80)
-  }, { once: true })
-
-  // Fallback: in case animationend doesn't fire, hide after 2s
-  setTimeout(() => {
-    if (overlay && overlay.parentNode) {
-      try { overlay.remove() } catch (e) { overlay.style.display = 'none' }
-    }
-  }, 2200)
-})
-
 // Custom Scroll Wheel Navigation
 function initCustomScrollWheel() {
   const scrollWheel = document.querySelector(".custom-scroll-wheel")
@@ -282,9 +217,9 @@ function createScrollParticles() {
     }, 10000)
   }
 
-  // Reduce particle creation frequency for better performance (was 500ms, now 2500ms)
+  // create an initial particle immediately to make the animation obvious
   createParticle()
-  setInterval(createParticle, 2500)
+  setInterval(createParticle, 500)
 }
 
 // Bubble particle animation (larger, slow rising bubbles)
@@ -310,8 +245,8 @@ function initBubbleParticles() {
     }, (duration + 1) * 1000)
   }
 
-  // create bubbles more sparsely for a subtle effect (increased from 1200ms to 3000ms for better performance)
-  setInterval(createBubble, 3000)
+  // create bubbles more sparsely for a subtle effect
+  setInterval(createBubble, 1200)
 }
 
 // Scroll wave and glow effects
@@ -355,12 +290,11 @@ function initCustomCursor() {
   document.body.appendChild(cursor)
 
   const trailElements = []
-  // Reduced from 8 to 5 trail elements for better performance
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 8; i++) {
     const trail = document.createElement("div")
     trail.className = "cursor-trail"
-    trail.style.opacity = ((5 - i) / 5) * 0.5
-    trail.style.transform = `translate(-50%, -50%) scale(${(5 - i) / 5})`
+    trail.style.opacity = ((8 - i) / 8) * 0.5
+    trail.style.transform = `translate(-50%, -50%) scale(${(8 - i) / 8})`
     document.body.appendChild(trail)
     trailElements.push(trail)
   }
@@ -441,7 +375,7 @@ function initCustomCursor() {
   document.addEventListener("mouseenter", () => {
     cursor.style.opacity = "1"
     trailElements.forEach((trail, index) => {
-      trail.style.opacity = ((5 - index) / 5) * 0.5
+      trail.style.opacity = ((8 - index) / 8) * 0.5
     })
   })
 }

@@ -12,11 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="reveal-overlay"></div>
-    <main>
     <nav class="navbar">
         <input type="checkbox" id="menu-toggle">
-        <a href="#home" class="logo">PortFolio</a> 
+        <a href="#home" class="logo">Portfolio</a> 
         <ul class="nav-menu">
             <label class="close-btn" for="menu-toggle"><i class="fas fa-times"></i></label> 
            
@@ -45,8 +43,8 @@
         <div class="scroll-dot" data-section="home"></div>
         <div class="scroll-dot" data-section="about"></div>
         <div class="scroll-dot" data-section="projects"></div>
-        <div class="scroll-dot" data-section="videos"></div>
-        <div class="scroll-dot" data-section="code"></div>
+                <div class="scroll-dot" data-section="videos"></div>
+                        <div class="scroll-dot" data-section="code  "></div>
         <div class="scroll-dot" data-section="services"></div>
         <div class="scroll-dot" data-section="contact"></div>
     </div>
@@ -56,7 +54,15 @@
     <div class="scroll-wave"></div>
     <div class="scroll-glow"></div>
 
-   
+    <div class="bars-animation">
+        <div class="bar" style="--i:6;"></div>
+        <div class="bar" style="--i:5;"></div>
+        <div class="bar" style="--i:4;"></div>
+        <div class="bar" style="--i:3;"></div>
+        <div class="bar" style="--i:2;"></div>
+        <div class="bar" style="--i:1;"></div>
+    </div>
+
     <section class="home" id="home">
         <div class="home-info">
             <h1>Oluwanifemi Oladimeji</h1>
@@ -64,8 +70,8 @@
                 
                 <span style="--i:1" data-text="Video Editor">Video Editor</span>
                 <span style="--i:2" data-text="Graphic Designer">Graphic Designer</span>
-                <span style="--i:3" data-text="Frontend Developer">Frontend Developer</span>
-                <span style="--i:4" data-text="Creative Developer">Creative Developer</span>
+                <span style="--i:3" data-text="3D Animator">3D Animator</span>
+                <span style="--i:4" data-text="Frontend Developer">Frontend Developer</span>
             </h2>
             <p>Passionate creative professional specializing in modern web development, stunning visual designs, and immersive digital experiences. I bring ideas to life through code, creativity, and cutting-edge technology.</p>
             <div class="btn-sci">
@@ -91,7 +97,7 @@
             <div class="about-info">
                 <div class="about-text">
                     <h3>Creative Developer & Designer</h3>
-                    <p>With a passion for creating exceptional digital experiences, I combine technical expertise with creative vision. My journey spans across frontend development, video editing, and graphic design.</p>
+                    <p>With a passion for creating exceptional digital experiences, I combine technical expertise with creative vision. My journey spans across frontend development, video editing, graphic design, and 3D animation.</p>
                     <p>I believe in the power of clean code, beautiful design, and seamless user experiences. Every project is an opportunity to push boundaries and create something extraordinary.</p>
                     <div class="skills">
                         <div class="skill-item">
@@ -107,8 +113,8 @@
                             <div class="skill-bar"><div class="skill-progress" style="--width: 95%"></div></div>
                         </div>
                         <div class="skill-item">
-                            <span>Graphic Design</span>
-                            <div class="skill-bar"><div class="skill-progress" style="--width: 85%"></div></div>
+                            <span>3D Animation</span>
+                            <div class="skill-bar"><div class="skill-progress" style="--width: 40%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -179,7 +185,7 @@
 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 113825.png" alt="GitHub Profile Finder">
+                        <img src="Annotation 2025-10-13 113825.png" alt="3D Animation">
                         <div class="project-overlay">
                             <div class="project-links">
                                  <a href="https://knifeprime.github.io/user-finder/"class="project-link"><i class='bx bx-link-external'></i></a>
@@ -213,7 +219,6 @@
                         <p>A simple yet interactive Rock Paper Scissors game built with HTML and JavaScript. Players compete against the computer, with instant results displayed after each round. The game features randomized computer choices, score tracking, and smooth UI feedback to enhance player engagement. A fun project that showcases core JavaScript logic, event handling, and DOM manipulation.</p>
                         <div class="project-tech">
                             <span>Html</span>
-                              <span>CSS</span>
                             <span>JavaScript</span>
                         </div>
                     </div>
@@ -234,34 +239,12 @@
                         <p>A sleek movie search application built with HTML, CSS, and JavaScript, powered by the OMDb API. Users can search for any movie by title and instantly view key details such as poster, release year, genre, and plot summary. The app features real-time API fetching, dynamic content rendering, and a clean, responsive layout designed for both desktop and mobile. A great example of integrating external APIs and handling asynchronous JavaScript to create an interactive user experience.</p>
                         <div class="project-tech">
                             <span>Html</span>
-                              <span>CSS</span>
                             <span>JavaScript</span>
                            
                         </div>
                     </div>
                 </div>
- <div class="project-card">
-                    <div class="project-image">
-                        <img src="Annotation 2025-10-31 151545.png" alt="Brand Identity">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="https://knifeprime.github.io/ReportIT/" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/ReportIT/" class="project-link"><i class='bx bxl-github'></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>ReportIT</h3>
-                        <p>ReportIt is a simple, fast, and reliable reporting platform designed to help citizens alert authorities about suspicious activities — especially incidents involving weapons and public safety threats. With instant location sharing and an easy-to-use interface, ReportIt empowers communities to stay one step ahead, protect each other, and respond quickly when it matters the most.</p>
-                        <div class="project-tech">
-                            <span>Html</span>
-                              <span>CSS</span>
-                            <span>JavaScript</span>
-                             <span>Cloudinary Database</span>
-                           
-                        </div>
-                    </div>
-                </div>
+
             
             </div>
         </div>
@@ -474,10 +457,10 @@
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class='bx bx-mobile-alt'></i>
+                        <i class='bx bx-cube'></i>
                     </div>
-                    <h3>UI/UX Design</h3>
-                    <p>User-centered interface design focused on creating intuitive, engaging, and accessible digital experiences.</p>
+                    <h3>3D Animation</h3>
+                    <p>Stunning 3D animations and modeling for entertainment, advertising, and interactive media projects.</p>
                 </div>
             </div>
         </div>
@@ -522,7 +505,7 @@
             </div>
         </div>
     </footer>
-    </div> <!-- Close page-content -->
+
     <script src="script.js"></script>
 </body>
 </html>
