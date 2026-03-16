@@ -24,7 +24,6 @@
             <li><a href="#about">About</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#videos">Video</a></li>
-            <li><a href="#code">Code</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -46,7 +45,6 @@
         <div class="scroll-dot" data-section="about"></div>
         <div class="scroll-dot" data-section="projects"></div>
         <div class="scroll-dot" data-section="videos"></div>
-        <div class="scroll-dot" data-section="code"></div>
         <div class="scroll-dot" data-section="services"></div>
         <div class="scroll-dot" data-section="contact"></div>
     </div>
@@ -57,19 +55,40 @@
     <div class="scroll-glow"></div>
 
    
+    <!-- Floating particles for home hero -->
+    <div class="hero-particles" aria-hidden="true">
+      <span class="hero-orb orb-1"></span>
+      <span class="hero-orb orb-2"></span>
+      <span class="hero-orb orb-3"></span>
+      <span class="hero-orb orb-4"></span>
+      <span class="hero-orb orb-5"></span>
+      <span class="hero-orb orb-6"></span>
+    </div>
+    <!-- Animated grid lines -->
+    <div class="hero-grid" aria-hidden="true"></div>
+
     <section class="home" id="home">
         <div class="home-info">
+            <div class="home-badge">✦ Available for Work</div>
             <h1>Oluwanifemi Oladimeji</h1>
             <h2>I'm a
                 
                 <span style="--i:1" data-text="Video Editor">Video Editor</span>
-                <span style="--i:2" data-text="Graphic Designer">Graphic Designer</span>
-                <span style="--i:3" data-text="Frontend Developer">Frontend Developer</span>
-                <span style="--i:4" data-text="Creative Developer">Creative Developer</span>
+                <span style="--i:2" data-text="Frontend Developer">Frontend Developer</span>
+                <span style="--i:3" data-text="Creative Developer">Creative Developer</span>
+                <span style="--i:4" data-text="UI/UX Developer">UI/UX Developer</span>
             </h2>
             <p>Passionate creative professional specializing in modern web development, stunning visual designs, and immersive digital experiences. I bring ideas to life through code, creativity, and cutting-edge technology.</p>
+            <div class="home-stats-mini">
+                <div class="mini-stat"><span class="mini-num">15+</span><span class="mini-label">Projects</span></div>
+                <div class="mini-divider"></div>
+                <div class="mini-stat"><span class="mini-num">3+</span><span class="mini-label">Years XP</span></div>
+                <div class="mini-divider"></div>
+                <div class="mini-stat"><span class="mini-num">100%</span><span class="mini-label">Satisfaction</span></div>
+            </div>
             <div class="btn-sci">
                 <a href="Oluwanifemi-(Nifemi)-Oladimeji-FlowCV-Resume-20251014.pdf" class="btn">Download CV</a>
+                <a href="#contact" class="btn btn-outline">Hire Me</a>
                 <div class="sci">
                     <a href="https://github.com/knifeprime/Portfolio/tree/knifeprime-patch-1"><i class='bx bxl-github'></i></a>  
                     <a href="https://www.linkedin.com/in/oluwanifemi-oladimeji/"><i class='bx bxl-linkedin'></i></a>
@@ -78,9 +97,15 @@
         </div>
         <div class="home-img">
             <div class="img-box">
+                <div class="img-ring ring-outer"></div>
+                <div class="img-ring ring-inner"></div>
                 <div class="img-item">
                     <img src="images/InShot_20250825_113738760.png" alt="Oluwanifemi Oladimeji">   
                 </div>
+                <div class="img-tech-badge badge-1"><i class='bx bxl-html5'></i> HTML</div>
+                <div class="img-tech-badge badge-2"><i class='bx bxl-css3'></i> CSS</div>
+                <div class="img-tech-badge badge-3"><i class='bx bxl-javascript'></i> JS</div>
+                <div class="img-tech-badge badge-4"><i class='bx bx-video'></i> Video</div>
             </div>
         </div>
     </section>
@@ -90,8 +115,8 @@
             <h2 class="section-title">About <span>Me</span></h2>
             <div class="about-info">
                 <div class="about-text">
-                    <h3>Creative Developer & Designer</h3>
-                    <p>With a passion for creating exceptional digital experiences, I combine technical expertise with creative vision. My journey spans across frontend development, video editing, and graphic design.</p>
+                    <h3>Creative Frontend Developer</h3>
+                    <p>With a passion for creating exceptional digital experiences, I combine technical expertise with creative vision. My journey spans across frontend development, video editing, and immersive web experiences.</p>
                     <p>I believe in the power of clean code, beautiful design, and seamless user experiences. Every project is an opportunity to push boundaries and create something extraordinary.</p>
                     <div class="skills">
                         <div class="skill-item">
@@ -107,8 +132,8 @@
                             <div class="skill-bar"><div class="skill-progress" style="--width: 95%"></div></div>
                         </div>
                         <div class="skill-item">
-                            <span>Graphic Design</span>
-                            <div class="skill-bar"><div class="skill-progress" style="--width: 85%"></div></div>
+                            <span>UI/UX Design</span>
+                            <div class="skill-bar"><div class="skill-progress" style="--width: 80%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -118,7 +143,7 @@
                         <p>Projects Completed</p>
                     </div>
                     <div class="stat-item">
-                        <h3>2+</h3>
+                        <h3>3+</h3>
                         <p>Years Experience</p>
                     </div>
                     <div class="stat-item">
@@ -133,137 +158,391 @@
     <section class="projects" id="projects">
         <div class="projects-content">
             <h2 class="section-title">My <span>Projects</span></h2>
-            <div class="projects-grid">
-                <div class="project-card">
+            <p class="section-subtitle">A showcase of my best work across web development, games & creative tools.</p>
+
+            <!-- FILTER TABS -->
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="web">Web Dev</button>
+                <button class="filter-btn" data-filter="game">Games</button>
+                <button class="filter-btn" data-filter="tool">Tools</button>
+                <button class="filter-btn" data-filter="creative">Creative</button>
+            </div>
+
+            <div class="projects-grid" id="projects-grid">
+
+                <!-- ── ORIGINAL 6 PROJECTS ── -->
+                <div class="project-card" data-category="web">
+                    <div class="project-badge">Featured</div>
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 111637.png" alt="E-commerce Website">
+                        <img src="Annotation 2025-10-13 111637.png" alt="Weather App">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/Weather-app-/"class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/Weather-app-" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/Weather-app-/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/Weather-app-" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
                         <h3>Weather App</h3>
-                        <p>A responsive weather application built with HTML, CSS, and JavaScript that fetches real-time weather data using an external API. The interface features dynamic background animations that change based on weather conditions (e.g., sunny, cloudy, rainy), creating a more immersive user experience. Users can search for any city and instantly view temperature, humidity, and weather status with smooth transitions and clean UI design.</p>
+                        <p>Responsive weather app with dynamic background animations that change based on real-time conditions — sunny, cloudy, rainy — fetched via external API with smooth transitions.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                            <span>Css</span>
-                            <span>JavaScript</span>
-                           
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>API</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="tool">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 112438.png" alt="Video Portfolio">
+                        <img src="Annotation 2025-10-13 112438.png" alt="Form Validation">
                         <div class="project-overlay">
                             <div class="project-links">
-                             <a href="https://knifeprime.github.io/dep-backend/"class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/dep-backend" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/dep-backend/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/dep-backend" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
                         <h3>Form Validation App</h3>
-                        <p>A lightweight JavaScript-powered form validation page designed to ensure proper user input before submission. The application requires users to enter a three-word username and a password that must match its confirmation field. Real-time validation provides instant feedback through dynamic messages and visual cues, preventing incorrect submissions and improving overall user experience. Built with clean HTML, CSS, and JavaScript for simplicity and efficiency.</p>
+                        <p>Lightweight JS-powered form validator with real-time feedback, three-word username rules, and password matching — preventing bad submissions with visual cues.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                             <span>Css</span>
-                              <span>JavaScript</span>
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="tool">
                     <div class="project-image">
                         <img src="Annotation 2025-10-13 113825.png" alt="GitHub Profile Finder">
                         <div class="project-overlay">
                             <div class="project-links">
-                                 <a href="https://knifeprime.github.io/user-finder/"class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/user-finder" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/user-finder/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/user-finder" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
                         <h3>GitHub Profile Finder</h3>
-                        <p>A user lookup tool built with HTML, CSS, and JavaScript that allows users to search for any GitHub profile by username. The app fetches real-time data using the GitHub API and displays key information such as profile picture, bio, follower count, public repositories, and profile link. Designed with a clean, responsive layout and smooth error handling for invalid users. A practical project that highlights API integration and dynamic UI rendering.</p>
+                        <p>Search any GitHub user and instantly see their avatar, bio, follower count, and public repos via the GitHub API — clean UI with smooth error handling.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                            <span>Css</span>
-                            <span>JavaScript</span>
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>GitHub API</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="game">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 120424.png" alt="Mobile App">
+                        <img src="Annotation 2025-10-13 120424.png" alt="Rock Paper Scissors">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/RPS/" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/RPS" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/RPS/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/RPS" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Rock Paper Scissors Game</h3>
-                        <p>A simple yet interactive Rock Paper Scissors game built with HTML and JavaScript. Players compete against the computer, with instant results displayed after each round. The game features randomized computer choices, score tracking, and smooth UI feedback to enhance player engagement. A fun project that showcases core JavaScript logic, event handling, and DOM manipulation.</p>
+                        <h3>Rock Paper Scissors</h3>
+                        <p>Interactive RPS game vs. the computer with score tracking, randomized AI moves, and smooth DOM-based UI feedback showcasing core JavaScript logic.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                              <span>CSS</span>
-                            <span>JavaScript</span>
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="web">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 124752.png" alt="Brand Identity">
+                        <img src="Annotation 2025-10-13 124752.png" alt="Movie Search">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/MOVIE-Search/" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/MOVIE-Search" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/MOVIE-Search/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/MOVIE-Search" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
                         <h3>Movie Search App</h3>
-                        <p>A sleek movie search application built with HTML, CSS, and JavaScript, powered by the OMDb API. Users can search for any movie by title and instantly view key details such as poster, release year, genre, and plot summary. The app features real-time API fetching, dynamic content rendering, and a clean, responsive layout designed for both desktop and mobile. A great example of integrating external APIs and handling asynchronous JavaScript to create an interactive user experience.</p>
+                        <p>Sleek OMDb-powered movie finder — search by title, get poster, genre, year & plot summary instantly. Responsive layout with async JS and dynamic content rendering.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                              <span>CSS</span>
-                            <span>JavaScript</span>
-                           
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>OMDb API</span>
                         </div>
                     </div>
                 </div>
- <div class="project-card">
+
+                <div class="project-card" data-category="web">
+                    <div class="project-badge new-badge">New</div>
                     <div class="project-image">
-                        <img src="Annotation 2025-10-31 151545.png" alt="Brand Identity">
+                        <img src="Annotation 2025-10-31 151545.png" alt="ReportIT">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/ReportIT/" class="project-link"><i class='bx bx-link-external'></i></a>
-                                <a href="https://github.com/knifeprime/ReportIT/" class="project-link"><i class='bx bxl-github'></i></a>
+                                <a href="https://knifeprime.github.io/ReportIT/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://github.com/knifeprime/ReportIT/" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="project-info">
                         <h3>ReportIT</h3>
-                        <p>ReportIt is a simple, fast, and reliable reporting platform designed to help citizens alert authorities about suspicious activities — especially incidents involving weapons and public safety threats. With instant location sharing and an easy-to-use interface, ReportIt empowers communities to stay one step ahead, protect each other, and respond quickly when it matters the most.</p>
+                        <p>Citizen safety platform for reporting suspicious activities with instant location sharing. Empowers communities to alert authorities fast — backed by Cloudinary for media uploads.</p>
                         <div class="project-tech">
-                            <span>Html</span>
-                              <span>CSS</span>
-                            <span>JavaScript</span>
-                             <span>Cloudinary Database</span>
-                           
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Cloudinary</span>
                         </div>
                     </div>
                 </div>
-            
+
+                <!-- ── EXTRA PROJECTS (hidden until "View More") ── -->
+
+                <div class="project-card project-extra hidden-project" data-category="web">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="1">
+                        <div class="project-placeholder-img"><i class='bx bx-cart-alt'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="ecommerce-ui.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>E-Commerce UI Kit</h3>
+                        <p>A pixel-perfect e-commerce storefront template with product grids, cart drawer, filter sidebar, and checkout flow. Built mobile-first with CSS Grid.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>CSS Grid</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="2">
+                        <div class="project-placeholder-img"><i class='bx bx-check-square'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="todo-list.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>TaskFlow — Todo List</h3>
+                        <p>Full-featured todo app with priority levels, categories, due dates, progress tracking, and localStorage persistence. Clean brutalist design.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>LocalStorage</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="3">
+                        <div class="project-placeholder-img"><i class='bx bx-calculator'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="calculator.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>CalcPrime — Calculator</h3>
+                        <p>Dark-mode calculator with history log, standard and scientific modes, keyboard support, and smooth number animations.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="game">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="4">
+                        <div class="project-placeholder-img"><i class='bx bx-bird'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="flappy-bird.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>FlappyPrime</h3>
+                        <p>Flappy Bird remake with 4 animated color themes, progressive difficulty levels, best score tracking, and smooth Canvas-based rendering.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>Canvas API</span><span>JavaScript</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="game">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="5">
+                        <div class="project-placeholder-img"><i class='bx bx-grid-alt'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="memory-game.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>MemFlip — Memory Game</h3>
+                        <p>Flip-and-match memory game using 18 unique SVG shapes. Animated unknown symbols on card backs, 3 difficulty levels, timer and best score.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>SVG</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="web">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="6">
+                        <div class="project-placeholder-img"><i class='bx bx-music'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="music-player.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>GrooveBox — Music Player</h3>
+                        <p>Real music player streaming CC-licensed tracks directly. Spinning album art, playlist, seek bar, shuffle, repeat and volume controls.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Web Audio</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="7">
+                        <div class="project-placeholder-img"><i class='bx bx-timer'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="pomodoro.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>FocusPulse — Pomodoro</h3>
+                        <p>Pomodoro focus timer with an integrated music player, CC-licensed streaming tracks, session dots, and desktop notifications.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Notifications API</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="8">
+                        <div class="project-placeholder-img"><i class='bx bx-wallet'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="budget-tracker.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Budget Tracker</h3>
+                        <p>Personal finance tracker with income/expense categorization, real-time balance, animated donut chart, and CSV export.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Canvas API</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="game">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="9">
+                        <div class="project-placeholder-img"><i class='bx bx-joystick'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="snake-game.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Snake Game Reborn</h3>
+                        <p>Classic Snake on HTML5 Canvas with neon aesthetics, power-ups, wall-wrap mode, and a high-score leaderboard in localStorage.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Canvas API</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="10">
+                        <div class="project-placeholder-img"><i class='bx bx-palette'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="color-palette.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Color Palette Generator</h3>
+                        <p>Lock-and-regenerate palette tool. Generate harmonious swatches, copy HEX/RGB values, and export as CSS custom properties.</p>
+                        <div class="project-tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Color Theory</span></div>
+                    </div>
+                </div>
+
+                <!-- ── 5 ANIMATED SITE PROJECTS ── -->
+
+                <div class="project-card project-extra hidden-project" data-category="creative">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="11">
+                        <div class="project-placeholder-img"><i class='bx bx-star'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="particle-galaxy.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Particle Galaxy</h3>
+                        <p>Interactive particle system with 4 animation modes — Galaxy, Vortex, Wave, Chaos. Move your mouse to attract particles, click to explode them.</p>
+                        <div class="project-tech"><span>Canvas API</span><span>JavaScript</span><span>Generative Art</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="game">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="12">
+                        <div class="project-placeholder-img"><i class='bx bx-grid'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="neon-breakout.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>NeonBreak — Breakout Game</h3>
+                        <p>Neon-glow Breakout/Arkanoid game with multi-level progression, particle explosions, glow trails, lives system, and best score tracking.</p>
+                        <div class="project-tech"><span>Canvas API</span><span>JavaScript</span><span>Particle FX</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="tool">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="13">
+                        <div class="project-placeholder-img"><i class='bx bx-keyboard'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="typing-test.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>TypeRush — Typing Speed Test</h3>
+                        <p>Real-time typing speed test with live WPM, accuracy tracking, character-by-character feedback, timer ring, and multiple time modes (15s–2min).</p>
+                        <div class="project-tech"><span>JavaScript</span><span>Real-time UI</span><span>WPM Tracker</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="creative">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="14">
+                        <div class="project-placeholder-img"><i class='bx bx-shape-circle'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="art-forge.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>ArtForge — Generative Art</h3>
+                        <p>Live generative art engine with 6 styles (Geometric, Spiral, Lissajous, Fractal, Mandala, Flow Field), color palettes, and PNG export.</p>
+                        <div class="project-tech"><span>Canvas API</span><span>JavaScript</span><span>Creative Coding</span></div>
+                    </div>
+                </div>
+
+                <div class="project-card project-extra hidden-project" data-category="web">
+                    <div class="project-badge new-badge">New</div>
+                    <div class="project-image project-image--gradient" data-gradient="15">
+                        <div class="project-placeholder-img"><i class='bx bx-brain'></i></div>
+                        <div class="project-overlay"><div class="project-links">
+                            <a href="brain-quiz.html" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                            <a href="https://github.com/knifeprime" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
+                        </div></div>
+                    </div>
+                    <div class="project-info">
+                        <h3>BrainZap — Trivia Quiz</h3>
+                        <p>4-category trivia quiz (Tech, Science, General, Pop Culture) with a 15-second countdown, live scoring, and animated grade results.</p>
+                        <div class="project-tech"><span>JavaScript</span><span>Animated UI</span><span>Quiz Logic</span></div>
+                    </div>
+                </div>
+
+            </div><!-- /.projects-grid -->
+
+            <!-- VIEW MORE BUTTON -->
+            <div class="view-more-wrapper">
+                <button class="view-more-btn" id="viewMoreBtn" aria-expanded="false">
+                    <span class="view-more-text">View More Projects</span>
+                    <span class="view-more-count">+15</span>
+                    <i class='bx bx-chevron-down view-more-icon'></i>
+                </button>
             </div>
+
         </div>
     </section>
     <section class="videos" id="videos">
@@ -381,72 +660,6 @@
         
     </section>
 
-        
-    <section class="code" id="code">
-        <div class="code-content">
-            <h2 class="section-title">Site <span>Projects</span></h2>
-            <div class="code-grid">
-                <div class="code-card">
-                    <div class="code-preview">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BDA2E6FED-AC2D-4A86-922E-E377BDD342A4%7D.png.jpg-o52xF3Eh4wp4OhWKvbDxlZ0upYjzqf.jpeg" alt="Church Website Code">
-                        <div class="code-overlay">
-                            <div class="code-links">
-                                <a href="https://knifeprime.github.io/Leading-people-assembly.com/" class="code-link">
-                                    <i class="bx bx-link-external"></i>
-                                </a>
-                                <a href="https://github.com/knifeprime/Leading-people-assembly.com" class="code-link">
-                                    <i class="bx bxl-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="code-info">
-                        <h3>God's Love Evangelical Church</h3>
-                        <p>
-                            Responsive church website with modern design, event management, sermon archives, and contact forms.
-                            Built with clean HTML5, CSS3, and vanilla JavaScript for optimal performance.
-                        </p>
-                        <div class="code-tech">
-                            <span>HTML5</span>
-                            <span>CSS3</span>
-                            <span>Responsive Design</span>
-                        </div>
-                    </div>
-                </div>
-
-               
-                <div class="code-card">
-                    <div class="code-preview">
-                        <img src="Annotation 2025-10-14 100553.png" alt="">
-                        <div class="code-overlay">
-                            <div class="code-links">
-                                <a href="#home" class="code-link">
-                                    <i class="bx bx-link-external"></i>
-                                </a>
-                                <a href="https://github.com/knifeprime/Portfolio/tree/knifeprime-patch-1" class="code-link">
-                                    <i class="bx bxl-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="code-info">
-                        <h3>THIS</h3>
-                        <p>
-                           ONE🙂
-                        </p>
-                        <div class="code-tech">
-                           <span>Html</span>
-                           <span>Css</span>
-                           <span>Javascript</span>
-                        </div>
-                    </div>
-                </div>
-
-               
-            </div>
-        </div>
-    </section>
-
     <section class="services" id="services">
         <div class="services-content">
             <h2 class="section-title">My <span>Services</span></h2>
@@ -464,13 +677,6 @@
                     </div>
                     <h3>Video Editing</h3>
                     <p>Professional video editing services including motion graphics, color correction, and post-production effects.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class='bx bx-palette'></i>
-                    </div>
-                    <h3>Graphic Design</h3>
-                    <p>Creative visual design solutions for branding, marketing materials, and digital media applications.</p>
                 </div>
                 <div class="service-card">
                     <div class="service-icon">

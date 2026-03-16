@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BrainZap — Trivia Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d1a;--s1:#14142a;--s2:#1e1e38;--accent:#6c63ff;--green:#00e676;--red:#ff5252;--yellow:#ffd600;--text:#e8e8f8;--muted:#6660a0;--font:'Nunito',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;}
+.back-bar{padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.06);}
+.back-bar a{color:var(--muted);font-size:13px;text-decoration:none;}.back-bar a:hover{color:var(--text);}
+.app{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{background:var(--s1);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:36px;max-width:640px;width:100%;animation:cardIn .4s ease;}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+/* Start screen */
+.start-screen h1{font-size:42px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
+.start-screen h1 em{font-style:normal;color:var(--accent);}
+.start-screen p{color:var(--muted);margin-bottom:28px;font-size:15px;}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+.cat-btn{padding:14px;border:2px solid rgba(255,255,255,.1);border-radius:14px;background:transparent;color:var(--text);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;text-align:left;}
+.cat-btn:hover,.cat-btn.active{background:rgba(108,99,255,.15);border-color:var(--accent);color:var(--accent);}
+.start-btn{width:100%;padding:16px;background:var(--accent);border:none;border-radius:14px;color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;transition:.15s;letter-spacing:.5px;}
+.start-btn:hover{background:#7d75ff;transform:scale(1.02);}
+/* Quiz screen */
+.progress-bar{height:4px;background:rgba(255,255,255,.08);border-radius:4px;margin-bottom:24px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a78bfa);border-radius:4px;transition:width .5s ease;}
+.q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.q-count{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:1px;}
+.timer{font-size:22px;font-weight:900;color:var(--yellow);}
+.timer.urgent{color:var(--red);animation:urge .3s ease infinite alternate;}
+@keyframes urge{from{transform:scale(1);}to{transform:scale(1.1);}}
+.q-text{font-size:clamp(16px,3vw,22px);font-weight:800;line-height:1.35;margin-bottom:28px;}
+.cat-tag{display:inline-block;background:rgba(108,99,255,.2);color:var(--accent);font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase;}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:500px){.answers{grid-template-columns:1fr;}}
+.ans-btn{padding:16px;border:2px solid rgba(255,255,255,.1);border-radius:14px;background:var(--s2);color:var(--text);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;text-align:left;line-height:1.3;}
+.ans-btn:hover:not(:disabled){background:rgba(108,99,255,.15);border-color:var(--accent);}
+.ans-btn.correct{background:rgba(0,230,118,.12);border-color:var(--green);color:var(--green);animation:pop .3s ease;}
+.ans-btn.wrong{background:rgba(255,82,82,.12);border-color:var(--red);color:var(--red);animation:shake .2s ease;}
+.ans-btn.reveal{background:rgba(0,230,118,.08);border-color:rgba(0,230,118,.4);}
+@keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.04);}100%{transform:scale(1);}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+/* Score screen */
+.score-screen{text-align:center;}
+.big-score{font-size:80px;font-weight:900;line-height:1;margin-bottom:8px;}
+.score-lbl{color:var(--muted);font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+.sg{background:var(--s2);border-radius:12px;padding:14px;text-align:center;}
+.sg .sv{font-size:26px;font-weight:900;}
+.sg .sl{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px;text-transform:uppercase;}
+.grade{font-size:40px;margin-bottom:8px;}
+.play-again{width:100%;padding:16px;background:var(--accent);border:none;border-radius:14px;color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;transition:.15s;}
+.play-again:hover{background:#7d75ff;transform:scale(1.02);}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="index.html">← Portfolio</a></div>
+<div class="app">
+  <div class="card" id="mainCard">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<script>
+const Q_BANK = {
+  tech: [
+    {q:"What does 'HTML' stand for?",a:["HyperText Markup Language","High Tech Modern Language","Hyper Transfer Machine Language","Home Tool Markup Language"],c:0},
+    {q:"Which language runs in the browser natively?",a:["Python","JavaScript","Ruby","PHP"],c:1},
+    {q:"What does CSS stand for?",a:["Counter Style Sheets","Cascading Style Sheets","Creative Script System","Computer Style Sheets"],c:1},
+    {q:"Which is NOT a JavaScript framework?",a:["React","Django","Vue","Angular"],c:1},
+    {q:"What does API stand for?",a:["Applied Program Interface","Application Programming Interface","Automated Protocol Integration","Active Page Interaction"],c:1},
+    {q:"Which HTML tag creates a hyperlink?",a:["<link>","<href>","<a>","<url>"],c:2},
+    {q:"What is the default display of a <div>?",a:["inline","inline-block","block","flex"],c:2},
+    {q:"Which HTTP status code means 'Not Found'?",a:["200","301","404","500"],c:2},
+  ],
+  science: [
+    {q:"What is the chemical symbol for water?",a:["WO","H2O","HO2","W"],c:1},
+    {q:"How many planets are in our solar system?",a:["7","8","9","10"],c:1},
+    {q:"What is the speed of light (approx)?",a:["300,000 km/s","150,000 km/s","600,000 km/s","30,000 km/s"],c:0},
+    {q:"Which gas do plants absorb during photosynthesis?",a:["Oxygen","Nitrogen","Carbon Dioxide","Hydrogen"],c:2},
+    {q:"What is the atomic number of Carbon?",a:["6","8","12","14"],c:0},
+    {q:"Which organ pumps blood in humans?",a:["Liver","Brain","Kidney","Heart"],c:3},
+    {q:"What force keeps us on the ground?",a:["Magnetism","Gravity","Friction","Tension"],c:1},
+    {q:"What is the largest planet in our solar system?",a:["Saturn","Neptune","Jupiter","Uranus"],c:2},
+  ],
+  general: [
+    {q:"What is the capital of France?",a:["London","Madrid","Paris","Rome"],c:2},
+    {q:"How many sides does a hexagon have?",a:["5","6","7","8"],c:1},
+    {q:"Who painted the Mona Lisa?",a:["Michelangelo","Raphael","Leonardo da Vinci","Caravaggio"],c:2},
+    {q:"What is the largest ocean on Earth?",a:["Atlantic","Indian","Arctic","Pacific"],c:3},
+    {q:"In which year did WW2 end?",a:["1943","1944","1945","1946"],c:2},
+    {q:"How many continents are there?",a:["5","6","7","8"],c:2},
+    {q:"What is the longest river in the world?",a:["Amazon","Mississippi","Nile","Yangtze"],c:2},
+    {q:"What is the hardest natural substance?",a:["Gold","Steel","Diamond","Quartz"],c:2},
+  ],
+  pop: [
+    {q:"How many colors are in a rainbow?",a:["5","6","7","8"],c:2},
+    {q:"What sport is played at Wimbledon?",a:["Cricket","Golf","Tennis","Football"],c:2},
+    {q:"Which company makes the iPhone?",a:["Samsung","Microsoft","Apple","Google"],c:2},
+    {q:"How many strings does a standard guitar have?",a:["4","5","6","7"],c:2},
+    {q:"What is the world's most spoken language?",a:["Spanish","English","Mandarin","Hindi"],c:2},
+    {q:"Which country invented the internet?",a:["Japan","UK","USA","Germany"],c:2},
+    {q:"What color is the sky on a clear day?",a:["Green","Red","Blue","Yellow"],c:2},
+    {q:"How many hours in a day?",a:["20","22","24","26"],c:2},
+  ],
+};
+
+const CATS = {tech:'💻 Technology', science:'🔬 Science', general:'🌍 General', pop:'🎭 Pop Culture'};
+
+let selectedCat = 'general', questions = [], qi = 0, score = 0, correct = 0, timerInt, timeLeft = 15, answered = false;
+
+function render(screen) {
+  const card = document.getElementById('mainCard');
+  card.style.animation = 'none'; card.offsetHeight; card.style.animation = '';
+
+  if (screen === 'start') {
+    card.innerHTML = `
+      <div class="start-screen">
+        <h1>Brain<em>Zap</em> ⚡</h1>
+        <p>Test your knowledge across different categories. 10 questions, 15 seconds each!</p>
+        <div class="ctrl-label" style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;">Choose Category</div>
+        <div class="cat-grid">
+          ${Object.entries(CATS).map(([k,v])=>`<button class="cat-btn${k===selectedCat?' active':''}" onclick="selectCat('${k}',this)">${v}</button>`).join('')}
+        </div>
+        <button class="start-btn" onclick="startQuiz()">⚡ Start Quiz</button>
+      </div>`;
+  } else if (screen === 'quiz') {
+    const q = questions[qi];
+    card.innerHTML = `
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:${(qi/questions.length)*100}%"></div></div>
+      <div class="q-header">
+        <span class="q-count">QUESTION ${qi+1} / ${questions.length}</span>
+        <span class="timer" id="timerEl">${timeLeft}</span>
+      </div>
+      <div class="cat-tag">${CATS[selectedCat]}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="answers">
+        ${q.a.map((ans,i)=>`<button class="ans-btn" id="ans${i}" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${ans}</button>`).join('')}
+      </div>`;
+    startTimer();
+  } else if (screen === 'score') {
+    const pct = Math.round(correct/questions.length*100);
+    const grade = pct>=90?'🏆':pct>=70?'🎉':pct>=50?'👍':'💪';
+    card.innerHTML = `
+      <div class="score-screen">
+        <div class="grade">${grade}</div>
+        <div class="big-score" style="color:${pct>=70?'var(--green)':pct>=50?'var(--yellow)':'var(--red)'}">${pct}%</div>
+        <div class="score-lbl">Final Score</div>
+        <div class="score-grid">
+          <div class="sg"><div class="sv" style="color:var(--green)">${correct}</div><div class="sl">Correct</div></div>
+          <div class="sg"><div class="sv" style="color:var(--red)">${questions.length-correct}</div><div class="sl">Wrong</div></div>
+          <div class="sg"><div class="sv" style="color:var(--yellow)">${score}</div><div class="sl">Score</div></div>
+        </div>
+        <button class="play-again" onclick="render('start')">Play Again</button>
+      </div>`;
+  }
+}
+
+function selectCat(c, btn) {
+  selectedCat = c;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startQuiz() {
+  const pool = [...Q_BANK[selectedCat]].sort(()=>Math.random()-.5).slice(0,8);
+  questions = pool; qi = 0; score = 0; correct = 0;
+  render('quiz');
+}
+
+function startTimer() {
+  timeLeft = 15; answered = false;
+  clearInterval(timerInt);
+  timerInt = setInterval(() => {
+    timeLeft--;
+    const el = document.getElementById('timerEl');
+    if (el) { el.textContent = timeLeft; el.classList.toggle('urgent', timeLeft <= 5); }
+    if (timeLeft <= 0) { clearInterval(timerInt); if (!answered) timeOut(); }
+  }, 1000);
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInt);
+  const q = questions[qi];
+  const correct_idx = q.c;
+  document.querySelectorAll('.ans-btn').forEach(btn => btn.disabled = true);
+  if (i === correct_idx) {
+    document.getElementById('ans'+i).classList.add('correct');
+    score += Math.max(10, timeLeft * 10);
+    correct++;
+  } else {
+    document.getElementById('ans'+i).classList.add('wrong');
+    document.getElementById('ans'+correct_idx).classList.add('reveal');
+  }
+  setTimeout(nextQ, 1200);
+}
+
+function timeOut() {
+  answered = true;
+  document.querySelectorAll('.ans-btn').forEach(btn => btn.disabled = true);
+  document.getElementById('ans'+questions[qi].c).classList.add('reveal');
+  setTimeout(nextQ, 1000);
+}
+
+function nextQ() {
+  qi++;
+  if (qi >= questions.length) render('score');
+  else render('quiz');
+}
+
+render('start');
+</script>
+</body>
+</html>

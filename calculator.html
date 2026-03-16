@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CalcPrime — Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0c0f;--s1:#151519;--s2:#1e1e24;--s3:#27272f;--accent:#7c3aed;--accent2:#a855f7;--num:#e8e6f0;--op:#a855f7;--eq-bg:linear-gradient(135deg,#7c3aed,#ec4899);--muted:#54545e;--font-mono:'DM Mono',monospace;--font-head:'Syne',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--num);font-family:var(--font-mono);min-height:100vh;display:flex;flex-direction:column;}
+.back-bar{padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.06);}
+.back-bar a{color:var(--muted);font-size:13px;text-decoration:none;}.back-bar a:hover{color:var(--num);}
+.app{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
+.calc{width:320px;background:var(--s1);border-radius:28px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);}
+/* Display */
+.display{padding:28px 24px 20px;background:var(--s1);border-bottom:1px solid rgba(255,255,255,.05);}
+.display-expr{min-height:24px;font-size:13px;color:var(--muted);text-align:right;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.display-main{font-size:52px;font-weight:300;text-align:right;letter-spacing:-2px;line-height:1.1;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:transform .1s;}
+.display-main.pop{transform:scale(1.04);}
+.history-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:flex-end;}
+.hist-chip{font-size:10px;background:rgba(124,58,237,.15);color:var(--accent2);padding:2px 8px;border-radius:10px;cursor:pointer;}
+.hist-chip:hover{background:rgba(124,58,237,.3);}
+/* Mode tabs */
+.mode-tabs{display:flex;padding:10px 12px;gap:4px;background:var(--s2);}
+.mode-tab{flex:1;padding:7px;border:none;background:transparent;color:var(--muted);font-family:var(--font-mono);font-size:11px;font-weight:500;border-radius:8px;cursor:pointer;transition:.15s;letter-spacing:.5px;}
+.mode-tab.active{background:var(--accent);color:#fff;}
+/* Buttons */
+.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;}
+.btn{height:64px;border:none;border-radius:16px;font-family:var(--font-mono);font-size:18px;font-weight:400;cursor:pointer;transition:.1s;position:relative;overflow:hidden;}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:.15s;}
+.btn:active::after{background:rgba(255,255,255,.08);}
+.btn:active{transform:scale(.95);}
+.btn.num{background:var(--s3);color:var(--num);}
+.btn.num:hover{background:#303038;}
+.btn.op{background:rgba(124,58,237,.18);color:var(--op);}
+.btn.op:hover{background:rgba(124,58,237,.32);}
+.btn.fn{background:var(--s2);color:#8b8b9a;font-size:14px;}
+.btn.fn:hover{background:var(--s3);}
+.btn.eq{background:var(--eq-bg);color:#fff;font-size:24px;box-shadow:0 4px 20px rgba(124,58,237,.4);}
+.btn.eq:hover{box-shadow:0 4px 28px rgba(124,58,237,.6);}
+.btn.zero{grid-column:span 2;text-align:left;padding-left:28px;}
+.btn.clear{background:rgba(239,68,68,.15);color:#f87171;}
+.btn.clear:hover{background:rgba(239,68,68,.3);}
+/* Scientific extra */
+.sci-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 12px 12px;}
+.sci-btns .btn{height:48px;font-size:12px;letter-spacing:.3px;}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="index.html">← Portfolio</a></div>
+<div class="app">
+  <div class="calc">
+    <div class="display">
+      <div class="display-expr" id="expr">0</div>
+      <div class="display-main" id="disp">0</div>
+      <div class="history-row" id="histRow"></div>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="setMode('std',this)">STD</button>
+      <button class="mode-tab" onclick="setMode('sci',this)">SCI</button>
+    </div>
+    <div id="sciBtns" class="sci-btns" style="display:none">
+      <button class="btn fn" onclick="sciOp('sin')">sin</button>
+      <button class="btn fn" onclick="sciOp('cos')">cos</button>
+      <button class="btn fn" onclick="sciOp('tan')">tan</button>
+      <button class="btn fn" onclick="sciOp('log')">log</button>
+      <button class="btn fn" onclick="sciOp('sqrt')">√</button>
+      <button class="btn fn" onclick="sciOp('sq')">x²</button>
+      <button class="btn fn" onclick="sciOp('inv')">1/x</button>
+      <button class="btn fn" onclick="sciOp('pi')">π</button>
+    </div>
+    <div class="btns">
+      <button class="btn fn clear" onclick="clearAll()">AC</button>
+      <button class="btn fn" onclick="toggleSign()">+/−</button>
+      <button class="btn fn" onclick="percent()">%</button>
+      <button class="btn op" onclick="inputOp('/')">÷</button>
+
+      <button class="btn num" onclick="inputNum('7')">7</button>
+      <button class="btn num" onclick="inputNum('8')">8</button>
+      <button class="btn num" onclick="inputNum('9')">9</button>
+      <button class="btn op" onclick="inputOp('*')">×</button>
+
+      <button class="btn num" onclick="inputNum('4')">4</button>
+      <button class="btn num" onclick="inputNum('5')">5</button>
+      <button class="btn num" onclick="inputNum('6')">6</button>
+      <button class="btn op" onclick="inputOp('-')">−</button>
+
+      <button class="btn num" onclick="inputNum('1')">1</button>
+      <button class="btn num" onclick="inputNum('2')">2</button>
+      <button class="btn num" onclick="inputNum('3')">3</button>
+      <button class="btn op" onclick="inputOp('+')">+</button>
+
+      <button class="btn num zero" onclick="inputNum('0')">0</button>
+      <button class="btn num" onclick="inputDot()">.</button>
+      <button class="btn eq" onclick="calculate()">=</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let cur = '0', prev = '', op = '', expr = '', history = [], waitNew = false;
+
+const disp = document.getElementById('disp');
+const exprEl = document.getElementById('expr');
+
+function setMode(m, btn) {
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sciBtns').style.display = m === 'sci' ? 'grid' : 'none';
+}
+
+function fmt(n) {
+  const num = parseFloat(n);
+  if (isNaN(num)) return 'Error';
+  if (Math.abs(num) > 1e12 || (Math.abs(num) < 1e-6 && num !== 0)) return num.toExponential(4);
+  const s = parseFloat(num.toPrecision(10)).toString();
+  return s;
+}
+
+function updateDisp() {
+  disp.textContent = fmt(cur);
+  exprEl.textContent = expr || cur;
+  disp.classList.add('pop');
+  setTimeout(() => disp.classList.remove('pop'), 100);
+}
+
+function inputNum(n) {
+  if (waitNew) { cur = n; waitNew = false; }
+  else cur = cur === '0' ? n : cur + n;
+  if (op) expr = prev + ' ' + opSym(op) + ' ' + cur;
+  updateDisp();
+}
+
+function inputDot() {
+  if (waitNew) { cur = '0.'; waitNew = false; }
+  else if (!cur.includes('.')) cur += '.';
+  updateDisp();
+}
+
+function inputOp(o) {
+  if (op && !waitNew) calculate(true);
+  prev = cur; op = o;
+  expr = cur + ' ' + opSym(o);
+  waitNew = true; updateDisp();
+}
+
+function opSym(o) { return {'+':'+','-':'−','*':'×','/':'÷'}[o] || o; }
+
+function calculate(chain = false) {
+  if (!op || !prev) return;
+  const a = parseFloat(prev), b = parseFloat(cur);
+  let res;
+  if (op === '+') res = a + b;
+  else if (op === '-') res = a - b;
+  else if (op === '*') res = a * b;
+  else if (op === '/') res = b === 0 ? 'Error' : a / b;
+  const fullExpr = prev + ' ' + opSym(op) + ' ' + cur + ' = ' + fmt(res);
+  if (!chain) {
+    history.unshift(fullExpr);
+    if (history.length > 5) history.pop();
+    renderHistory();
+    expr = fullExpr;
+  }
+  cur = String(res); prev = ''; op = ''; waitNew = !chain;
+  updateDisp();
+}
+
+function clearAll() { cur = '0'; prev = ''; op = ''; expr = ''; waitNew = false; updateDisp(); }
+function toggleSign() { cur = String(-parseFloat(cur)); updateDisp(); }
+function percent() { cur = String(parseFloat(cur) / 100); updateDisp(); }
+
+function sciOp(fn) {
+  const n = parseFloat(cur);
+  const r = {
+    sin: Math.sin(n * Math.PI / 180), cos: Math.cos(n * Math.PI / 180),
+    tan: Math.tan(n * Math.PI / 180), log: Math.log10(n),
+    sqrt: Math.sqrt(n), sq: n * n, inv: 1 / n, pi: Math.PI
+  }[fn];
+  expr = fn + '(' + cur + ') = ' + fmt(r);
+  cur = String(r); waitNew = true; updateDisp();
+}
+
+function renderHistory() {
+  document.getElementById('histRow').innerHTML = history.slice(0, 3).map(h =>
+    `<div class="hist-chip" title="${h}">${h.length > 20 ? h.slice(0, 20) + '…' : h}</div>`
+  ).join('');
+}
+
+document.addEventListener('keydown', e => {
+  if ('0123456789'.includes(e.key)) inputNum(e.key);
+  else if (e.key === '.') inputDot();
+  else if (e.key === '+') inputOp('+');
+  else if (e.key === '-') inputOp('-');
+  else if (e.key === '*') inputOp('*');
+  else if (e.key === '/') { e.preventDefault(); inputOp('/'); }
+  else if (e.key === 'Enter' || e.key === '=') calculate();
+  else if (e.key === 'Escape') clearAll();
+  else if (e.key === 'Backspace') { cur = cur.length > 1 ? cur.slice(0, -1) : '0'; updateDisp(); }
+});
+
+updateDisp();
+</script>
+</body>
+</html>

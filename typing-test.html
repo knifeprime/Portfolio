@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TypeRush — Typing Speed Test</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f13;--s1:#181820;--s2:#202028;--green:#00f5a0;--red:#ff4757;--blue:#5d78ff;--yellow:#ffd32a;--text:#e8e8f0;--muted:#555565;--font:'JetBrains Mono',monospace;--head:'Syne',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;}
+.back-bar{padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.06);}
+.back-bar a{color:var(--muted);font-size:12px;text-decoration:none;}.back-bar a:hover{color:var(--text);}
+.app{flex:1;display:flex;flex-direction:column;align-items:center;padding:40px 20px;max-width:860px;margin:0 auto;width:100%;}
+h1{font-family:var(--head);font-size:clamp(32px,6vw,52px);font-weight:800;letter-spacing:-2px;margin-bottom:6px;}
+h1 .g{color:var(--green);}
+.sub{color:var(--muted);font-size:13px;margin-bottom:36px;letter-spacing:1px;}
+/* Stats bar */
+.stats{display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;justify-content:center;}
+.stat-box{background:var(--s1);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 24px;text-align:center;min-width:110px;}
+.stat-box .val{font-size:28px;font-weight:700;line-height:1;}
+.stat-box .lbl{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:4px;text-transform:uppercase;}
+.wpm{color:var(--green);}
+.acc{color:var(--blue);}
+.tm{color:var(--yellow);}
+/* Timer ring */
+.timer-ring{position:relative;width:64px;height:64px;}
+.timer-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:5;}
+.ring-fill{fill:none;stroke:var(--yellow);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
+.ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;}
+/* Word display */
+.word-area{background:var(--s1);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px;width:100%;max-width:760px;margin-bottom:20px;position:relative;overflow:hidden;}
+.word-area::before{content:'';position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,var(--s1),transparent);z-index:1;pointer-events:none;}
+.word-area::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to top,var(--s1),transparent);z-index:1;pointer-events:none;}
+.words-wrap{height:96px;overflow:hidden;line-height:1.9;font-size:clamp(16px,2.5vw,22px);letter-spacing:.5px;}
+.word{display:inline-block;margin-right:10px;position:relative;}
+.word.correct span{color:var(--green);}
+.word.wrong span{color:var(--red);}
+.word.current span{color:var(--text);}
+.word span{color:var(--muted);}
+.caret{display:inline-block;width:2px;height:1.2em;background:var(--green);margin-left:-2px;animation:blink .7s step-end infinite;vertical-align:text-bottom;position:absolute;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.char.typed-correct{color:var(--green);}
+.char.typed-wrong{color:var(--red);text-decoration:underline;}
+/* Input */
+.input-row{display:flex;gap:12px;width:100%;max-width:760px;margin-bottom:24px;}
+.type-input{flex:1;background:var(--s2);border:2px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 20px;color:var(--text);font-family:var(--font);font-size:17px;outline:none;transition:.2s;caret-color:var(--green);}
+.type-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,245,160,.1);}
+.type-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,71,87,.1);animation:shake .2s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px);}}
+.restart-btn{background:var(--green);border:none;border-radius:12px;padding:14px 24px;color:#000;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;}
+.restart-btn:hover{transform:scale(1.04);}
+/* Time select */
+.time-row{display:flex;gap:8px;margin-bottom:24px;}
+.time-btn{padding:7px 16px;background:var(--s1);border:1px solid rgba(255,255,255,.1);border-radius:20px;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;transition:.2s;}
+.time-btn.active,.time-btn:hover{background:var(--yellow);color:#000;border-color:var(--yellow);}
+/* Results */
+.results{display:none;background:var(--s1);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:36px;width:100%;max-width:560px;text-align:center;}
+.results.show{display:block;animation:fadeIn .4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.result-big{font-size:70px;font-weight:700;color:var(--green);}
+.result-label{color:var(--muted);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+.rstat{background:var(--s2);border-radius:10px;padding:14px;}
+.rstat .rv{font-size:24px;font-weight:700;}
+.rstat .rl{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:1px;}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="index.html">← Portfolio</a></div>
+<div class="app">
+  <h1>Type<span class="g">Rush</span></h1>
+  <p class="sub">HOW FAST CAN YOU TYPE?</p>
+
+  <div class="stats">
+    <div class="stat-box"><div class="val wpm" id="wpm">0</div><div class="lbl">WPM</div></div>
+    <div class="stat-box"><div class="val acc" id="acc">100%</div><div class="lbl">Accuracy</div></div>
+    <div class="stat-box" style="padding:8px;">
+      <div class="timer-ring">
+        <svg viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="28"/><circle class="ring-fill" id="ringFill" cx="32" cy="32" r="28" stroke-dasharray="176" stroke-dashoffset="0"/></svg>
+        <div class="ring-text" id="timerDisp">30</div>
+      </div>
+      <div class="lbl" style="margin-top:2px;">TIME</div>
+    </div>
+    <div class="stat-box"><div class="val" id="wordsDone" style="color:var(--text)">0</div><div class="lbl">Words</div></div>
+  </div>
+
+  <div class="time-row">
+    <button class="time-btn" onclick="setTime(15,this)">15s</button>
+    <button class="time-btn active" onclick="setTime(30,this)">30s</button>
+    <button class="time-btn" onclick="setTime(60,this)">60s</button>
+    <button class="time-btn" onclick="setTime(120,this)">2min</button>
+  </div>
+
+  <div class="word-area">
+    <div class="words-wrap" id="wordsWrap"></div>
+  </div>
+
+  <div class="input-row">
+    <input class="type-input" id="inp" placeholder="Start typing..." oninput="handleInput()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="restart-btn" onclick="restart()">↺ Restart</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="result-big" id="rWpm">0</div>
+    <div class="result-label">WORDS PER MINUTE</div>
+    <div class="result-grid">
+      <div class="rstat"><div class="rv" id="rAcc" style="color:var(--blue)">100%</div><div class="rl">ACCURACY</div></div>
+      <div class="rstat"><div class="rv" id="rWords" style="color:var(--green)">0</div><div class="rl">WORDS</div></div>
+      <div class="rstat"><div class="rv" id="rCorrect" style="color:var(--green)">0</div><div class="rl">CORRECT</div></div>
+      <div class="rstat"><div class="rv" id="rErrors" style="color:var(--red)">0</div><div class="rl">ERRORS</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()" style="width:100%">Play Again</button>
+  </div>
+</div>
+
+<script>
+const WORDS = 'the quick brown fox jumps over lazy dog time space world light dark fire water earth wind rain snow cloud sun moon star tree leaf river ocean mountain valley desert forest city town road bridge house door window book code line function class object array string number boolean null true false return if else for while loop break continue import export default async await promise then catch finally try'.split(' ');
+
+let timeLimit = 30, timeLeft = 30, timerInt = null, started = false;
+let wordList = [], currentWord = 0, totalChars = 0, wrongChars = 0, wordsDone = 0;
+const CIRC = 2 * Math.PI * 28;
+
+function randWords(n) {
+  const arr = [];
+  for (let i = 0; i < n; i++) arr.push(WORDS[Math.floor(Math.random()*WORDS.length)]);
+  return arr;
+}
+
+function buildUI() {
+  const wrap = document.getElementById('wordsWrap');
+  wrap.innerHTML = wordList.map((w, wi) =>
+    `<span class="word" id="w${wi}">${w.split('').map((c,ci)=>`<span class="char" id="c${wi}-${ci}">${c}</span>`).join('')}</span>`
+  ).join('');
+  scrollToWord(0);
+}
+
+function scrollToWord(i) {
+  const el = document.getElementById('w'+i);
+  if (el) el.scrollIntoView({block:'center',behavior:'smooth'});
+}
+
+function handleInput() {
+  const inp = document.getElementById('inp');
+  const val = inp.value;
+
+  if (!started && val.length > 0) {
+    started = true;
+    timerInt = setInterval(tick, 1000);
+  }
+
+  if (val.endsWith(' ')) {
+    const typed = val.trim();
+    const correct = wordList[currentWord];
+    const wEl = document.getElementById('w'+currentWord);
+
+    if (typed === correct) {
+      wEl.className = 'word correct';
+      wordsDone++;
+      document.getElementById('wordsDone').textContent = wordsDone;
+    } else {
+      wEl.className = 'word wrong';
+      wrongChars += Math.abs(typed.length - correct.length) + 1;
+    }
+
+    totalChars += correct.length + 1;
+    currentWord++;
+    inp.value = '';
+
+    // Add more words if needed
+    if (currentWord >= wordList.length - 10) {
+      wordList = wordList.concat(randWords(20));
+      buildUI();
+      // re-mark already completed words
+      for (let i=0; i<currentWord; i++) {
+        const w = document.getElementById('w'+i);
+        if(w) w.className = 'word correct';
+      }
+    }
+
+    scrollToWord(currentWord);
+    updateWPM();
+    return;
+  }
+
+  // Char-by-char coloring
+  const wEl = document.getElementById('w'+currentWord);
+  if (!wEl) return;
+  const correctWord = wordList[currentWord];
+  for (let i = 0; i < correctWord.length; i++) {
+    const c = document.getElementById(`c${currentWord}-${i}`);
+    if (!c) continue;
+    if (i < val.length) {
+      c.className = 'char ' + (val[i] === correctWord[i] ? 'typed-correct' : 'typed-wrong');
+    } else {
+      c.className = 'char';
+    }
+  }
+
+  // Shake on error
+  if (val.length > 0 && val[val.length-1] !== correctWord[val.length-1]) {
+    inp.classList.add('error');
+    setTimeout(()=>inp.classList.remove('error'), 200);
+  }
+}
+
+function updateWPM() {
+  const elapsed = timeLimit - timeLeft;
+  if (elapsed <= 0) return;
+  const wpm = Math.round((wordsDone / elapsed) * 60);
+  document.getElementById('wpm').textContent = wpm;
+  const acc = totalChars > 0 ? Math.round(((totalChars - wrongChars) / totalChars) * 100) : 100;
+  document.getElementById('acc').textContent = acc + '%';
+}
+
+function tick() {
+  timeLeft--;
+  document.getElementById('timerDisp').textContent = timeLeft;
+  document.getElementById('ringFill').style.strokeDashoffset = CIRC * (1 - timeLeft/timeLimit);
+  updateWPM();
+  if (timeLeft <= 0) {
+    clearInterval(timerInt);
+    document.getElementById('inp').disabled = true;
+    showResults();
+  }
+}
+
+function showResults() {
+  const wpm = Math.round((wordsDone / timeLimit) * 60);
+  const acc = totalChars > 0 ? Math.round(((totalChars - wrongChars) / totalChars) * 100) : 100;
+  document.getElementById('rWpm').textContent = wpm;
+  document.getElementById('rAcc').textContent = acc + '%';
+  document.getElementById('rWords').textContent = wordsDone;
+  document.getElementById('rCorrect').textContent = wordsDone;
+  document.getElementById('rErrors').textContent = Math.max(0, currentWord - wordsDone);
+  document.getElementById('results').classList.add('show');
+}
+
+function setTime(t, btn) {
+  timeLimit = t;
+  document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  restart();
+}
+
+function restart() {
+  clearInterval(timerInt);
+  timeLeft = timeLimit; started = false;
+  currentWord = 0; totalChars = 0; wrongChars = 0; wordsDone = 0;
+  wordList = randWords(50);
+  buildUI();
+  const inp = document.getElementById('inp');
+  inp.value = ''; inp.disabled = false; inp.focus();
+  document.getElementById('wpm').textContent = 0;
+  document.getElementById('acc').textContent = '100%';
+  document.getElementById('wordsDone').textContent = 0;
+  document.getElementById('timerDisp').textContent = timeLimit;
+  document.getElementById('ringFill').style.strokeDashoffset = 0;
+  document.getElementById('results').classList.remove('show');
+}
+
+restart();
+</script>
+</body>
+</html>
