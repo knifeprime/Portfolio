@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oluwanifemi Oladimeji - Portfolio</title>
     <link rel="icon" type="image/svg+xml" href="minato_normal_select.png?height=32&width=32">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -38,21 +40,6 @@
     <div class="scroll-indicator">
         <div class="scroll-progress"></div>
     </div>
-
-    <!-- Added custom scroll wheel navigation -->
-    <div class="custom-scroll-wheel">
-        <div class="scroll-dot" data-section="home"></div>
-        <div class="scroll-dot" data-section="about"></div>
-        <div class="scroll-dot" data-section="projects"></div>
-        <div class="scroll-dot" data-section="videos"></div>
-        <div class="scroll-dot" data-section="services"></div>
-        <div class="scroll-dot" data-section="contact"></div>
-    </div>
-
-    <!-- Added background animation elements -->
-    <div class="scroll-bg-animation"></div>
-    <div class="scroll-wave"></div>
-    <div class="scroll-glow"></div>
 
    
     <!-- Floating particles for home hero -->
@@ -175,10 +162,10 @@
                 <div class="project-card" data-category="web">
                     <div class="project-badge">Featured</div>
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 111637.png" alt="Weather App">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 111637.png" alt="Weather App">
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="https://knifeprime.github.io/Weather-app-/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
+                                <a href="https://knifeprime.github.io/Weather-app-/" class="project-link" target="_blank" rel="noopener noreferrer" aria-label="Open Weather App"><i class='bx bx-link-external'></i></a>
                                 <a href="https://github.com/knifeprime/Weather-app-" class="project-link" target="_blank"><i class='bx bxl-github'></i></a>
                             </div>
                         </div>
@@ -194,7 +181,7 @@
 
                 <div class="project-card" data-category="tool">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 112438.png" alt="Form Validation">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 112438.png" alt="Form Validation">
                         <div class="project-overlay">
                             <div class="project-links">
                                 <a href="https://knifeprime.github.io/dep-backend/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
@@ -213,7 +200,7 @@
 
                 <div class="project-card" data-category="tool">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 113825.png" alt="GitHub Profile Finder">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 113825.png" alt="GitHub Profile Finder">
                         <div class="project-overlay">
                             <div class="project-links">
                                 <a href="https://knifeprime.github.io/user-finder/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
@@ -232,7 +219,7 @@
 
                 <div class="project-card" data-category="game">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 120424.png" alt="Rock Paper Scissors">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 120424.png" alt="Rock Paper Scissors">
                         <div class="project-overlay">
                             <div class="project-links">
                                 <a href="https://knifeprime.github.io/RPS/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
@@ -251,7 +238,7 @@
 
                 <div class="project-card" data-category="web">
                     <div class="project-image">
-                        <img src="Annotation 2025-10-13 124752.png" alt="Movie Search">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 124752.png" alt="Movie Search">
                         <div class="project-overlay">
                             <div class="project-links">
                                 <a href="https://knifeprime.github.io/MOVIE-Search/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
@@ -271,7 +258,7 @@
                 <div class="project-card" data-category="web">
                     <div class="project-badge new-badge">New</div>
                     <div class="project-image">
-                        <img src="Annotation 2025-10-31 151545.png" alt="ReportIT">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-31 151545.png" alt="ReportIT">
                         <div class="project-overlay">
                             <div class="project-links">
                                 <a href="https://knifeprime.github.io/ReportIT/" class="project-link" target="_blank"><i class='bx bx-link-external'></i></a>
@@ -549,9 +536,29 @@
         <div class="videos-content">
             <h2 class="section-title">Video <span>Editing</span></h2>
             <div class="videos-grid">
+                <div class="video-card promo-video-card">
+                    <div class="video-thumbnail promo-video-thumbnail" aria-label="Promo Video thumbnail">
+                        <img loading="lazy" decoding="async" src="Screenshot (53).png" alt="Promo Video thumbnail">
+                        <div class="promo-video-placeholder"><i class="bx bx-video"></i><span>Promo Video</span><small>Add your CapCut video</small></div>
+                        <div class="video-overlay">
+                            <div class="play-button">
+                                <div class="project-links">
+                                    <a href="https://drive.google.com/file/d/1kFzuGbv4ySrory4yE4KNi2UkedDvue-O/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Open Promo Video"><i class='bx bx-play'></i></a>
+                                </div>
+                                <i class="bx bx-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3>Promo Video</h3>
+                        <p>Reserved space for a CapCut promo video with punchy transitions, motion graphics, and polished visual effects.</p>
+                        <div class="video-tech"><span>CapCut</span><span>Visual Effects</span><span>Motion Graphics</span></div>
+                    </div>
+                </div>
+
                 <div class="video-card">
                     <div class="video-thumbnail">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF09C0D84-3DA1-47DE-811D-481E85BCA5A8%7D.png.jpg-sNjWKBPPJtPX05pqAWhynAd8NEJXeG.jpeg" alt="Church Event Promo Video">
+                        <img loading="lazy" decoding="async" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BF09C0D84-3DA1-47DE-811D-481E85BCA5A8%7D.png.jpg-sNjWKBPPJtPX05pqAWhynAd8NEJXeG.jpeg" alt="Church Event Promo Video">
                         <div class="video-overlay">
                             <div class="play-button">
                                 <div class="project-links">
@@ -632,7 +639,7 @@
 
                 <div class="video-card">
                     <div class="video-thumbnail">
-                        <img src="Annotation 2025-10-13 140859.png" alt="Social Media Content">
+                        <img loading="lazy" decoding="async" src="Annotation 2025-10-13 140859.png" alt="Social Media Content">
                         <div class="video-overlay">
                             <div class="play-button">
                                 <div class="project-links">
@@ -729,6 +736,6 @@
         </div>
     </footer>
     </div> <!-- Close page-content -->
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

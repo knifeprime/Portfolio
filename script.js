@@ -1,15 +1,26 @@
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
+    const selector = this.getAttribute("href")
+    const target = selector ? document.querySelector(selector) : null
+    if (!target) return
+
     e.preventDefault()
-    const target = document.querySelector(this.getAttribute("href"))
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      })
-    }
+    history.replaceState(null, "", selector)
+    target.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
+    })
   })
+})
+
+// Keep every project and video link clickable above card/overlay handlers.
+document.addEventListener("click", (event) => {
+  const link = event.target.closest(".project-link, .project-links a")
+  if (!link) return
+
+  event.stopPropagation()
+  if (link.target === "_blank") link.rel = "noopener noreferrer"
 })
 
 // Active navigation highlighting
@@ -117,19 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  // Initialize custom scroll features (skip heavier/desktop-only features on touch)
-  initCustomScrollWheel()
-  createScrollParticles()
-  window.addEventListener("scroll", handleScroll)
-  initMouseGlow()
+  // Keep scrolling lightweight: use the progress bar only.
   updateScrollProgress()
 
-  // Only initialize the custom cursor on non-touch devices
-  if (!isTouchDevice) {
-    initCustomCursor()
-    // Add bubble particles on non-touch devices for visual depth
-    initBubbleParticles()
-  }
+  // Use a single lightweight custom cursor on pointer devices.
+  if (!isTouchDevice) initCustomCursor()
 
   // Add tap-to-open behavior for project/code/video cards on touch devices or small screens.
   // Some environments (devtools device emulation) may not set touch flags, so we also
@@ -264,6 +267,7 @@ function initCustomScrollWheel() {
 
 // Background particle animation
 function createScrollParticles() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 940px), (pointer: coarse)").matches) return
   const bgAnimation = document.querySelector(".scroll-bg-animation")
   if (!bgAnimation) return // nothing to do if container missing
 
@@ -289,6 +293,7 @@ function createScrollParticles() {
 
 // Bubble particle animation (larger, slow rising bubbles)
 function initBubbleParticles() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 940px), (pointer: coarse)").matches) return
   const container = document.querySelector('.scroll-bg-animation')
   if (!container) return
 
@@ -314,12 +319,13 @@ function initBubbleParticles() {
   setInterval(createBubble, 3000)
 }
 
-// Scroll wave and glow effects
+// Scroll wave and glow effects, throttled so scroll never causes repeated layout work.
+let scrollTimeout
+let isScrolling = false
 function handleScroll() {
   const scrollWave = document.querySelector(".scroll-wave")
   const scrollGlow = document.querySelector(".scroll-glow")
-  let isScrolling = false
-  let scrollTimeout
+  if (!scrollWave || !scrollGlow) return
 
   if (!isScrolling) {
     scrollWave.classList.add("active")
@@ -353,51 +359,12 @@ function initCustomCursor() {
   const cursor = document.createElement("div")
   cursor.className = "custom-cursor"
   document.body.appendChild(cursor)
+  document.body.classList.add("custom-cursor-active")
 
-  const trailElements = []
-  // Reduced from 8 to 5 trail elements for better performance
-  for (let i = 0; i < 5; i++) {
-    const trail = document.createElement("div")
-    trail.className = "cursor-trail"
-    trail.style.opacity = ((5 - i) / 5) * 0.5
-    trail.style.transform = `translate(-50%, -50%) scale(${(5 - i) / 5})`
-    document.body.appendChild(trail)
-    trailElements.push(trail)
-  }
-
-  let mouseX = 0
-  let mouseY = 0
-  const trailX = []
-  const trailY = []
-
-  for (let i = 0; i < trailElements.length; i++) {
-    trailX[i] = 0
-    trailY[i] = 0
-  }
-
-  document.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX
-    mouseY = e.clientY
-
-    cursor.style.left = mouseX + "px"
-    cursor.style.top = mouseY + "px"
-  })
-
-  function animateTrail() {
-    trailX[0] = mouseX
-    trailY[0] = mouseY
-
-    for (let i = 1; i < trailElements.length; i++) {
-      trailX[i] += (trailX[i - 1] - trailX[i]) * 0.3
-      trailY[i] += (trailY[i - 1] - trailY[i]) * 0.3
-
-      trailElements[i].style.left = trailX[i] + "px"
-      trailElements[i].style.top = trailY[i] + "px"
-    }
-
-    requestAnimationFrame(animateTrail)
-  }
-  animateTrail()
+  // A single transform-only cursor avoids an always-running trail animation.
+  document.addEventListener("mousemove", (event) => {
+    cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`
+  }, { passive: true })
 
   const interactiveElements = document.querySelectorAll("a, button, .btn, .project-card, .service-card, .scroll-dot")
 
@@ -433,16 +400,10 @@ function initCustomCursor() {
 
   document.addEventListener("mouseleave", () => {
     cursor.style.opacity = "0"
-    trailElements.forEach((trail) => {
-      trail.style.opacity = "0"
-    })
   })
 
   document.addEventListener("mouseenter", () => {
     cursor.style.opacity = "1"
-    trailElements.forEach((trail, index) => {
-      trail.style.opacity = ((5 - index) / 5) * 0.5
-    })
   })
 }
 
@@ -489,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ─── Project filter tabs ─── */
+  /* ─��─ Project filter tabs ─── */
   const filterBtns = document.querySelectorAll('.filter-btn');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
