@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TaskFlow — Todo List</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#f8f4ef;--s1:#fff;--s2:#f0ebe3;--ink:#1a1410;--muted:#9e9590;
+  --red:#e85d42;--green:#3dbf8a;--yellow:#f5c842;--blue:#4a90e2;
+  --orange:#f07b3f;--purple:#9b59b6;
+  --font:'Space Grotesk',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);min-height:100vh;padding-bottom:60px;}
+.back-bar{padding:14px 24px;border-bottom:2px solid var(--ink);background:var(--s1);}
+.back-bar a{color:var(--muted);font-size:13px;text-decoration:none;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.back-bar a:hover{color:var(--ink);}
+.app{max-width:680px;margin:0 auto;padding:40px 20px;}
+.header{margin-bottom:36px;}
+.header h1{font-size:clamp(36px,7vw,54px);font-weight:700;line-height:.95;letter-spacing:-2px;}
+.header h1 em{font-style:normal;color:var(--orange);}
+.header p{color:var(--muted);font-size:14px;margin-top:10px;}
+.stats-bar{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.stat-chip{background:var(--s1);border:2px solid var(--ink);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;}
+.stat-chip span{color:var(--orange);}
+/* Input area */
+.add-area{background:var(--s1);border:2px solid var(--ink);border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:4px 4px 0 var(--ink);}
+.add-row{display:flex;gap:10px;margin-bottom:12px;}
+.add-input{flex:1;border:2px solid var(--ink);border-radius:10px;padding:12px 16px;font-family:var(--font);font-size:15px;font-weight:500;background:var(--bg);outline:none;transition:.2s;}
+.add-input:focus{background:#fff;box-shadow:0 0 0 3px rgba(240,123,63,.2);}
+.add-btn{background:var(--ink);color:#fff;border:2px solid var(--ink);border-radius:10px;padding:12px 20px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;white-space:nowrap;}
+.add-btn:hover{background:var(--orange);border-color:var(--orange);}
+.add-meta{display:flex;gap:10px;flex-wrap:wrap;}
+.meta-sel{border:2px solid var(--ink);border-radius:8px;padding:7px 12px;font-family:var(--font);font-size:13px;font-weight:600;background:var(--bg);cursor:pointer;outline:none;}
+/* Filter tabs */
+.filter-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+.f-btn{padding:8px 16px;border:2px solid var(--ink);border-radius:20px;background:transparent;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:.15s;}
+.f-btn.active,.f-btn:hover{background:var(--ink);color:#fff;}
+/* Todo items */
+.todo-list{display:flex;flex-direction:column;gap:8px;}
+.todo-item{background:var(--s1);border:2px solid var(--ink);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:.2s;box-shadow:3px 3px 0 transparent;}
+.todo-item:hover{box-shadow:3px 3px 0 var(--ink);}
+.todo-item.done{opacity:.55;background:var(--s2);}
+.todo-item.done .todo-text{text-decoration:line-through;color:var(--muted);}
+.check-btn{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--ink);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;font-size:13px;}
+.check-btn:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.todo-item.done .check-btn{background:var(--green);border-color:var(--green);color:#fff;}
+.todo-body{flex:1;min-width:0;}
+.todo-text{font-size:15px;font-weight:600;line-height:1.3;}
+.todo-meta-row{display:flex;gap:8px;margin-top:5px;align-items:center;flex-wrap:wrap;}
+.priority-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;}
+.priority-tag.high{background:#fde8e4;color:var(--red);}
+.priority-tag.mid{background:#fef9e2;color:#c9a000;}
+.priority-tag.low{background:#e4f7ef;color:var(--green);}
+.cat-tag{font-size:11px;font-weight:600;color:var(--muted);padding:2px 8px;background:var(--bg);border-radius:4px;}
+.due-tag{font-size:11px;color:var(--muted);}
+.del-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px;border-radius:6px;transition:.15s;flex-shrink:0;}
+.del-btn:hover{color:var(--red);background:#fde8e4;}
+/* Empty */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty .big{font-size:50px;margin-bottom:12px;}
+.empty p{font-size:15px;font-weight:600;}
+/* Progress */
+.progress-section{background:var(--s1);border:2px solid var(--ink);border-radius:14px;padding:18px;margin-bottom:20px;box-shadow:3px 3px 0 var(--ink);}
+.progress-header{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;font-weight:700;}
+.progress-bar{height:8px;background:var(--s2);border-radius:4px;overflow:hidden;border:1.5px solid var(--ink);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--red));border-radius:3px;transition:width .5s ease;}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="index.html">← Portfolio</a></div>
+<div class="app">
+  <div class="header">
+    <h1>Task<em>Flow</em></h1>
+    <p>Stay focused. Stay productive. Get it done.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-chip">Total: <span id="totalCount">0</span></div>
+    <div class="stat-chip">Done: <span id="doneCount">0</span></div>
+    <div class="stat-chip">Left: <span id="leftCount">0</span></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-header"><span>Progress</span><span id="progressPct">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="add-area">
+    <div class="add-row">
+      <input class="add-input" id="taskInput" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')addTask()">
+      <button class="add-btn" onclick="addTask()">+ Add</button>
+    </div>
+    <div class="add-meta">
+      <select class="meta-sel" id="prioritySel">
+        <option value="high">🔴 High</option>
+        <option value="mid" selected>🟡 Medium</option>
+        <option value="low">🟢 Low</option>
+      </select>
+      <select class="meta-sel" id="catSel">
+        <option value="Work">💼 Work</option>
+        <option value="Personal">🏠 Personal</option>
+        <option value="Health">❤️ Health</option>
+        <option value="Learning">📚 Learning</option>
+        <option value="Creative">🎨 Creative</option>
+      </select>
+      <input type="date" class="meta-sel" id="dueSel">
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <button class="f-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="f-btn" onclick="setFilter('active',this)">Active</button>
+    <button class="f-btn" onclick="setFilter('done',this)">Done</button>
+    <button class="f-btn" onclick="setFilter('high',this)">🔴 High</button>
+    <button class="f-btn" onclick="clearDone()">🗑 Clear Done</button>
+  </div>
+
+  <div class="todo-list" id="todoList"></div>
+</div>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('taskflow_tasks') || '[]');
+let filter = 'all';
+
+function save() { localStorage.setItem('taskflow_tasks', JSON.stringify(tasks)); }
+
+function addTask() {
+  const text = document.getElementById('taskInput').value.trim();
+  if (!text) return;
+  tasks.unshift({
+    id: Date.now(), text,
+    priority: document.getElementById('prioritySel').value,
+    cat: document.getElementById('catSel').value,
+    due: document.getElementById('dueSel').value,
+    done: false, created: Date.now()
+  });
+  document.getElementById('taskInput').value = '';
+  save(); render();
+}
+
+function toggle(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) { t.done = !t.done; save(); render(); }
+}
+
+function del(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  save(); render();
+}
+
+function clearDone() { tasks = tasks.filter(t => !t.done); save(); render(); }
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function render() {
+  let visible = tasks;
+  if (filter === 'active') visible = tasks.filter(t => !t.done);
+  else if (filter === 'done') visible = tasks.filter(t => t.done);
+  else if (filter === 'high') visible = tasks.filter(t => t.priority === 'high');
+
+  const done = tasks.filter(t => t.done).length;
+  const total = tasks.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('leftCount').textContent = total - done;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const list = document.getElementById('todoList');
+  if (!visible.length) {
+    list.innerHTML = `<div class="empty"><div class="big">${filter === 'done' ? '🏆' : '✅'}</div><p>${filter === 'done' ? 'Nothing completed yet' : 'All clear! Add a task above.'}</p></div>`;
+    return;
+  }
+  list.innerHTML = visible.map(t => `
+    <div class="todo-item${t.done ? ' done' : ''}" id="item-${t.id}">
+      <button class="check-btn" onclick="toggle(${t.id})">${t.done ? '✓' : ''}</button>
+      <div class="todo-body">
+        <div class="todo-text">${t.text}</div>
+        <div class="todo-meta-row">
+          <span class="priority-tag ${t.priority}">${t.priority}</span>
+          <span class="cat-tag">${t.cat}</span>
+          ${t.due ? `<span class="due-tag">📅 ${fmtDate(t.due)}</span>` : ''}
+        </div>
+      </div>
+      <button class="del-btn" onclick="del(${t.id})">×</button>
+    </div>`).join('');
+}
+
+render();
+</script>
+</body>
+</html>

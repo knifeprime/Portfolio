@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ArtForge — Generative Art</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#111;--s1:#1a1a1a;--text:#fff;--muted:#666;--font:'DM Sans',sans-serif;--head:'Bebas Neue',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;}
+.back-bar{padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.08);}
+.back-bar a{color:var(--muted);font-size:13px;text-decoration:none;}.back-bar a:hover{color:#fff;}
+.app{flex:1;display:grid;grid-template-columns:1fr 280px;gap:0;max-width:1200px;margin:0 auto;width:100%;padding:24px;gap:24px;}
+@media(max-width:760px){.app{grid-template-columns:1fr;}}
+h1{font-family:var(--head);font-size:36px;letter-spacing:2px;margin-bottom:4px;}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px;}
+/* Canvas */
+.canvas-wrap{background:#000;border-radius:16px;overflow:hidden;aspect-ratio:1;position:relative;}
+#artCanvas{display:block;width:100%;height:100%;}
+.canvas-overlay{position:absolute;bottom:16px;left:16px;display:flex;gap:8px;}
+.canvas-btn{padding:7px 14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;color:#fff;font-size:12px;cursor:pointer;backdrop-filter:blur(10px);transition:.15s;font-family:var(--font);}
+.canvas-btn:hover{background:rgba(255,255,255,.2);}
+/* Controls */
+.controls{display:flex;flex-direction:column;gap:16px;}
+.ctrl-group{background:var(--s1);border-radius:12px;padding:16px;}
+.ctrl-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.style-btn{padding:10px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:transparent;color:rgba(255,255,255,.6);font-family:var(--font);font-size:12px;cursor:pointer;transition:.15s;text-align:center;}
+.style-btn.active,.style-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3);}
+.slider-row{margin-bottom:12px;}
+.slider-row label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;}
+.slider-row label span{color:#fff;}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:rgba(255,255,255,.15);border-radius:3px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:#fff;border-radius:50%;cursor:pointer;}
+.color-row{display:flex;gap:8px;flex-wrap:wrap;}
+.color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;}
+.color-dot.active{border-color:#fff;transform:scale(1.2);}
+.gen-btn{width:100%;padding:14px;background:#fff;color:#000;border:none;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.5px;}
+.gen-btn:hover{background:#eee;transform:scale(1.02);}
+.anim-toggle{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;}
+.toggle{position:relative;width:42px;height:24px;background:rgba(255,255,255,.1);border-radius:12px;cursor:pointer;transition:.3s;}
+.toggle.on{background:#fff;}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#000;top:3px;left:3px;transition:.3s;}
+.toggle.on::after{left:21px;background:#000;}
+.toggle:not(.on)::after{background:#666;}
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="index.html">← Portfolio</a></div>
+<div class="app">
+  <div>
+    <h1>ArtForge</h1>
+    <p class="sub">Generative art engine — create infinite patterns</p>
+    <div class="canvas-wrap">
+      <canvas id="artCanvas" width="600" height="600"></canvas>
+      <div class="canvas-overlay">
+        <button class="canvas-btn" onclick="saveArt()">💾 Save</button>
+        <button class="canvas-btn" onclick="generate()">🎲 Random</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="ctrl-group">
+      <div class="ctrl-label">Style</div>
+      <div class="style-grid">
+        <button class="style-btn active" onclick="setStyle('geometric',this)">⬡ Geometric</button>
+        <button class="style-btn" onclick="setStyle('spiral',this)">🌀 Spiral</button>
+        <button class="style-btn" onclick="setStyle('lissajous',this)">〰️ Lissajous</button>
+        <button class="style-btn" onclick="setStyle('fractal',this)">❄️ Fractal</button>
+        <button class="style-btn" onclick="setStyle('mandala',this)">☸️ Mandala</button>
+        <button class="style-btn" onclick="setStyle('noise',this)">🔲 Flow Field</button>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Parameters</div>
+      <div class="slider-row"><label>Complexity <span id="compVal">5</span></label><input type="range" min="2" max="12" value="5" id="comp" oninput="document.getElementById('compVal').textContent=this.value;generate()"></div>
+      <div class="slider-row"><label>Scale <span id="scaleVal">5</span></label><input type="range" min="1" max="10" value="5" id="scl" oninput="document.getElementById('scaleVal').textContent=this.value;generate()"></div>
+      <div class="slider-row"><label>Opacity <span id="opVal">80</span>%</label><input type="range" min="10" max="100" value="80" id="op" oninput="document.getElementById('opVal').textContent=this.value;generate()"></div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl-label">Color Palette</div>
+      <div class="color-row" id="colorRow">
+        <div class="color-dot active" style="background:linear-gradient(135deg,#a855f7,#ec4899)" data-pal="0" onclick="setPal(0,this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#00f5a0,#00d4ff)" data-pal="1" onclick="setPal(1,this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#f5c842,#ff6b6b)" data-pal="2" onclick="setPal(2,this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#fff,#888)" data-pal="3" onclick="setPal(3,this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#4d96ff,#5d78ff)" data-pal="4" onclick="setPal(4,this)"></div>
+        <div class="color-dot" style="background:linear-gradient(135deg,#ff6b6b,#ffd700)" data-pal="5" onclick="setPal(5,this)"></div>
+      </div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="anim-toggle">Animate <div class="toggle on" id="animToggle" onclick="toggleAnim()"></div></div>
+    </div>
+
+    <button class="gen-btn" onclick="generate()">✦ Generate New</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('artCanvas');
+const ctx = canvas.getContext('2d');
+const W = 600, H = 600;
+
+const PALETTES = [
+  ['#a855f7','#c084fc','#ec4899','#f472b6','#7c3aed'],
+  ['#00f5a0','#00d4ff','#22d3ee','#4ade80','#34d399'],
+  ['#f5c842','#ff6b6b','#ff9f43','#ffd700','#ff4757'],
+  ['#ffffff','#cccccc','#999999','#666666','#333333'],
+  ['#4d96ff','#5d78ff','#60a5fa','#93c5fd','#3b82f6'],
+  ['#ff6b6b','#ffd700','#ff9f43','#ff4757','#eccc68'],
+];
+
+let style = 'geometric', pal = 0, animating = true, animFrame = null, seed = Math.random() * 1000;
+
+function r(min,max){return min+Math.random()*(max-min);}
+function getPalColor(i){const p=PALETTES[pal];return p[i%p.length];}
+function getComp(){return parseInt(document.getElementById('comp').value);}
+function getScale(){return parseInt(document.getElementById('scl').value)/5;}
+function getOp(){return parseInt(document.getElementById('op').value)/100;}
+
+function setStyle(s,btn){style=s;document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');generate();}
+function setPal(p,dot){pal=p;document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));dot.classList.add('active');generate();}
+
+function toggleAnim(){
+  animating=!animating;
+  document.getElementById('animToggle').classList.toggle('on',animating);
+  if(animating)animLoop(); else cancelAnimationFrame(animFrame);
+}
+
+let t=0;
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  const comp=getComp(),sc=getScale(),op=getOp();
+
+  if(style==='geometric'){
+    for(let i=0;i<comp*8;i++){
+      const sides=Math.floor(r(3,9));
+      const x=r(50,550),y=r(50,550),radius=r(20,80)*sc;
+      ctx.save();ctx.translate(x,y);ctx.rotate(t*0.01+i);
+      ctx.globalAlpha=op*r(0.3,1);
+      ctx.strokeStyle=getPalColor(i);ctx.lineWidth=r(0.5,2.5);
+      ctx.beginPath();
+      for(let j=0;j<=sides;j++){const a=j/sides*Math.PI*2;ctx.lineTo(Math.cos(a)*radius,Math.sin(a)*radius);}
+      ctx.stroke();ctx.restore();
+    }
+  } else if(style==='spiral'){
+    ctx.save();ctx.translate(W/2,H/2);
+    for(let i=0;i<comp*100;i++){
+      const angle=i*0.15+t*0.02,rad=(i*sc*1.2);
+      const x=Math.cos(angle)*rad,y=Math.sin(angle)*rad;
+      ctx.globalAlpha=op*(1-i/(comp*100));
+      ctx.fillStyle=getPalColor(i);
+      ctx.beginPath();ctx.arc(x,y,r(1,3),0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+  } else if(style==='lissajous'){
+    ctx.save();ctx.translate(W/2,H/2);
+    ctx.globalAlpha=op;ctx.strokeStyle=getPalColor(0);ctx.lineWidth=1.5;
+    ctx.beginPath();
+    const a=comp/3,b=(comp+1)/3;
+    for(let i=0;i<=628;i++){
+      const angle=i*0.01;
+      const x=Math.sin(a*angle+t*0.02)*240*sc/5;
+      const y=Math.sin(b*angle)*240*sc/5;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    for(let c=0;c<PALETTES[pal].length;c++){
+      ctx.strokeStyle=getPalColor(c);ctx.globalAlpha=op*0.5;ctx.lineWidth=0.8;
+      ctx.beginPath();
+      for(let i=0;i<=628;i++){
+        const angle=i*0.01;
+        const x=Math.sin((a+c)*angle+t*0.02)*200*sc/5;
+        const y=Math.sin((b+c)*angle)*200*sc/5;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  } else if(style==='fractal'){
+    function branch(x,y,len,angle,depth){
+      if(depth===0||len<2)return;
+      const ex=x+Math.cos(angle)*len,ey=y+Math.sin(angle)*len;
+      ctx.globalAlpha=op*(depth/comp);
+      ctx.strokeStyle=getPalColor(comp-depth);ctx.lineWidth=depth*0.5;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);ctx.stroke();
+      const spread=r(0.3,0.7);
+      branch(ex,ey,len*spread,angle-r(0.3,0.7)+Math.sin(t*0.02)*0.2,depth-1);
+      branch(ex,ey,len*spread,angle+r(0.3,0.7)+Math.cos(t*0.02)*0.2,depth-1);
+    }
+    const depth=Math.min(comp,9);
+    branch(W/2,H-50,100*sc,-(Math.PI/2),depth);
+  } else if(style==='mandala'){
+    ctx.save();ctx.translate(W/2,H/2);
+    const sym=comp;
+    for(let s=0;s<sym;s++){
+      ctx.save();ctx.rotate((s/sym)*Math.PI*2+t*0.005);
+      for(let r2=1;r2<=4;r2++){
+        ctx.globalAlpha=op/r2;ctx.strokeStyle=getPalColor(s+r2);ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.arc(0,0,40*r2*sc,0,Math.PI*2/sym);
+        ctx.moveTo(0,0);ctx.lineTo(0,40*r2*sc);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    ctx.restore();
+  } else if(style==='noise'){
+    const step=20/sc;
+    for(let x=0;x<W;x+=step){
+      for(let y=0;y<H;y+=step){
+        const angle=Math.sin(x*0.01+t*0.01)*Math.cos(y*0.01+t*0.008)*Math.PI*2;
+        ctx.save();ctx.translate(x,y);ctx.rotate(angle);
+        ctx.globalAlpha=op*0.6;
+        ctx.strokeStyle=getPalColor(Math.floor((x+y)/50));ctx.lineWidth=0.8;
+        ctx.beginPath();ctx.moveTo(-step/2,0);ctx.lineTo(step/2,0);ctx.stroke();
+        ctx.restore();
+      }
+    }
+  }
+}
+
+function generate(){seed=Math.random()*1000;draw();}
+
+function animLoop(){
+  animFrame=requestAnimationFrame(animLoop);
+  t++;draw();
+}
+
+function saveArt(){
+  const a=document.createElement('a');a.download='artforge.png';a.href=canvas.toDataURL();a.click();
+}
+
+animLoop();
+</script>
+</body>
+</html>
